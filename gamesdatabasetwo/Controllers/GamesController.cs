@@ -41,7 +41,7 @@ namespace gamesdatabasetwo.Controllers
         {
             try
             {
-                var result = context.GameById(id);
+                var result = context.GameByIdConvertedToViewModel(id);
                 return Ok(result);
             }
             catch (Exception)

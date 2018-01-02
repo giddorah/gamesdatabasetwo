@@ -17,7 +17,7 @@ namespace gamesdatabasetwo.Data
         public void RemoveGame(int id)
         {
             var gameToRemove = GameById(id);
-            //Games.Remove(gameToRemove);
+            Games.Remove(gameToRemove);
 
             SaveChanges();
         }
@@ -28,14 +28,26 @@ namespace gamesdatabasetwo.Data
             Games.Add(game);
             SaveChanges();
         }
-        public ViewGameModel GameById(int id)
+        public Game GameById(int id)
         {
-
             var gameToReturn = Games.Single(i => i.Id == id);
             gameToReturn.Developer = Developers.Single(i => i.Id == gameToReturn.DeveloperId);             
             gameToReturn.Publisher = Publishers.Single(i => i.Id == gameToReturn.PublisherId);
 
-            var viewGameModel = new ViewGameModel { Name = gameToReturn.Name, Developer = gameToReturn.Developer.Name, Genre = gameToReturn.Genre, Platforms = gameToReturn.Platforms, Publisher = gameToReturn.Publisher.Name, ReleasedWhere = gameToReturn.ReleasedWhere, Theme = gameToReturn.Theme, Year = gameToReturn.Year };
+            return gameToReturn;
+        }
+
+        public ViewGameModel GameByIdConvertedToViewModel(int id)
+        {
+            return GameConvertFromDbModelToViewModel(GameById(id));
+        }
+
+        public ViewGameModel GameConvertFromDbModelToViewModel(Game game)
+        {
+            game.Developer = Developers.Single(i => i.Id == game.DeveloperId);
+            game.Publisher = Publishers.Single(i => i.Id == game.PublisherId);
+
+            var viewGameModel = new ViewGameModel { Name = game.Name, Developer = game.Developer.Name, Genre = game.Genre, Platforms = game.Platforms, Publisher = game.Publisher.Name, ReleasedWhere = game.ReleasedWhere, Theme = game.Theme, Year = game.Year };
             return viewGameModel;
         }
 
@@ -45,14 +57,7 @@ namespace gamesdatabasetwo.Data
 
             foreach (var game in Games)
             {
-                
-                var gameToList = game;
-                gameToList.Developer = Developers.Single(i => i.Id == gameToList.DeveloperId);
-                gameToList.Publisher = Publishers.Single(i => i.Id == gameToList.PublisherId);
-
-                var viewGameModel = new ViewGameModel { Name = gameToList.Name, Developer = gameToList.Developer.Name, Genre = gameToList.Genre, Platforms = gameToList.Platforms, Publisher = gameToList.Publisher.Name, ReleasedWhere = gameToList.ReleasedWhere, Theme = gameToList.Theme, Year = gameToList.Year };
-
-                listOfGamesWithPublisherAndDeveloper.Add(viewGameModel);
+                listOfGamesWithPublisherAndDeveloper.Add(GameConvertFromDbModelToViewModel(game));
             }
 
             return listOfGamesWithPublisherAndDeveloper;
