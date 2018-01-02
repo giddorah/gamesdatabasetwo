@@ -15,7 +15,7 @@ $("#createUser").click(function () {
     console.log(email);
     $.ajax({
         url: '/users/add',
-        method: 'GET',
+        method: 'POST',
         data: { email: email }
     }).done(function (result) {
         console.log(result);
@@ -41,6 +41,18 @@ $("#logOut").click(function () {
         url: 'users/signout',
         method: 'POST',
         
+    }).done(function (result) {
+        console.log(result);
+    })
+});
+
+$("#getAll").click(function () {
+
+
+    $.ajax({
+        url: 'users/getall',
+        method: 'get',
+
     }).done(function (result) {
         console.log(result);
     })

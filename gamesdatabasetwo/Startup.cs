@@ -29,9 +29,10 @@ namespace gamesdatabasetwo
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            //DefaultFilesOptions DefaultFile = new DefaultFilesOptions();
-            //DefaultFile.DefaultFileNames.Clear();
-            //DefaultFile.DefaultFileNames.Add("index.html");
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+            
 
             services.AddMvc();
         }
@@ -43,6 +44,9 @@ namespace gamesdatabasetwo
             {
                 app.UseDeveloperExceptionPage();
             }
+            DefaultFilesOptions DefaultFile = new DefaultFilesOptions();
+            DefaultFile.DefaultFileNames.Clear();
+            DefaultFile.DefaultFileNames.Add("index.html");
 
             app.UseAuthentication();
             app.UseStaticFiles();
