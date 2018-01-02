@@ -13,21 +13,21 @@ namespace gamesdatabasetwo.Data
         public DbSet<Game> Games { get; set; }
 
 
-        public void Remove(int id)
+        public void RemoveGame(int id)
         {
-            var gameToRemove = ById(id);
+            var gameToRemove = GameById(id);
             Games.Remove(gameToRemove);
 
             SaveChanges();
         }
 
 
-        public void AddCustomer(Game game)
+        public void AddGame(Game game)
         {
             Games.Add(game);
             SaveChanges();
         }
-        public Game ById(int id)
+        public Game GameById(int id)
         {
             var gameToReturn = Games.Single(i => i.Id == id);
 

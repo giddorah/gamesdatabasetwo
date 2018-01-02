@@ -11,9 +11,9 @@ namespace gamesdatabasetwo.Controllers
     public class GamesController : Controller
     {
 
-        private ApplicationDbContext context;
+        private ApplicationDbContextPartial context;
 
-        public GamesController(ApplicationDbContext context)
+        public GamesController(ApplicationDbContextPartial context)
         {
             this.context = context;
         }
@@ -29,7 +29,7 @@ namespace gamesdatabasetwo.Controllers
         [Route("removegame")]
         public IActionResult RemoveGame(int id)
         {
-            context.Remove(id);
+            context.RemoveGame(id);
             return Ok($"Game with the id {id} has been removed.");
         }
 
@@ -37,14 +37,14 @@ namespace gamesdatabasetwo.Controllers
         [Route("getspecificgame")]
         public IActionResult GetSpecificGame(int id)
         {
-            return Ok(context.ById(id));
+            return Ok(context.GameById(id));
         }
 
         [HttpPost]
         [Route("addgame")]
         public IActionResult AddGame(Game GameToAdd)
         {
-            context.Add(GameToAdd);
+            context.AddGame(GameToAdd);
             return Ok($"Game {GameToAdd.Name} has been added.");
         }
     }
