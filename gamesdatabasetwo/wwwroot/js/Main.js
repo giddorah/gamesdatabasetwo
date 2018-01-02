@@ -16,7 +16,7 @@
 
             let number = 1;
             $.each(result, function (index, item) {
-                developerData += '<option value="' + number + '">' + item.name + '</option>';
+                developerData += '<option value="' + item.name + '">' + item.name + '</option>';
                 number++;
             });
             $("#developerSelectForm").html(developerData);
@@ -33,7 +33,7 @@
 
             let number = 1;
             $.each(result, function (index, item) {
-                publisherData += '<option value="' + number + '">' + item.name + '</option>';
+                publisherData += '<option value="' + item.name + '">' + item.name + '</option>';
                 number++;
             });
             $("#publisherSelectForm").html(publisherData);
@@ -136,10 +136,11 @@ $("#createGame").click(function () {
     let theme = $("#gameTheme").val();
     let genre = $("#gameGenre").val();
     let releasedWhere = $("#gameReleasedWhere").val();
-    let publisher = $("#gamePublisher").val();
-    let developer = $("#gameDeveloper").val();
+    let publisher = $("#publisherSelectForm").val();
+    let developer = $("#developerSelectForm").val();
 
     console.log(developer);
+    console.log(publisher);
     $.ajax({
         url: '/api/games/addgame',
         method: 'POST',
