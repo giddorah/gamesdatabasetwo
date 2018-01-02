@@ -7,6 +7,13 @@
         data: { id: number }
     }).done(function (result) {
         console.log(result);
+        let message = '<div class="alert alert-warning alert-dismissible fade show" role="alert">' +
+            '<strong>Found: </strong>' + result.name +
+  '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                '<span aria-hidden="true">&times;</span>'+
+            '</button>'+
+            '</div>';
+        $("#showResults").html(message);
     })
 });
 
