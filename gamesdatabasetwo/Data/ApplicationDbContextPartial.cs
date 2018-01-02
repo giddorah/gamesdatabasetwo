@@ -55,5 +55,14 @@ namespace gamesdatabasetwo.Data
             Publishers.Add(publisher);
             SaveChanges();
         }
+
+        public List<Developer> AllDevelopers()
+        {
+            return Developers.ToList();
+        }
+        public List<Publisher> AllPublishers()
+        {
+            return Publishers.ToList();
+        }
     }
 }
