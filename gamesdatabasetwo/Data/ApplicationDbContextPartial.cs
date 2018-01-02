@@ -11,6 +11,9 @@ namespace gamesdatabasetwo.Data
     {
 
         public DbSet<Game> Games { get; set; }
+        public DbSet<Developer> Developers { get; set; }
+
+        public DbSet<Publisher> Publishers { get; set; }
 
 
         public void RemoveGame(int id)
@@ -36,7 +39,20 @@ namespace gamesdatabasetwo.Data
 
         public void RemoveUser(ApplicationUser user)
         {
+           
             Remove(user);
+            SaveChanges();
+        }
+
+        public void AddDeveloper(Developer developer)
+        {
+            Developers.Add(developer);
+            SaveChanges();
+        }
+
+        public void AddPublisher(Publisher publisher)
+        {
+            Publishers.Add(publisher);
             SaveChanges();
         }
     }
