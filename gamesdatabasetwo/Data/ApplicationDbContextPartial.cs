@@ -33,11 +33,5 @@ namespace gamesdatabasetwo.Data
 
             return gameToReturn;
         }
-
-        public void RemoveUser(ApplicationUser user)
-        {
-            Remove(user);
-            SaveChanges();
-        }
     }
 }
