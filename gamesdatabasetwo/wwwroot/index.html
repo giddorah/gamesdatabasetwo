@@ -64,21 +64,28 @@
             <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameReleasedWhere" />
         </div>
         <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">
-                    Publisher:
-                </span>
-            </div>
-            <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gamePublisher" />
-        </div>
-        <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">
-                    Developer:
-                </span>
+
+
+            <div class="dropdown">
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="publisherDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Publisher
+                </button>
+                <div class="dropdown-menu" aria-labelledby="publisherDropdownMenuButton" id="publisherDropdown">
+                </div>
             </div>
 
-            <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameDeveloper" />
+
+        </div>
+        <div class="input-group input-group-sm mb-3">
+
+
+            <div class="dropdown">
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="developerDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Developer
+                </button>
+                <div class="dropdown-menu" aria-labelledby="developerDropdownMenuButton" id="developerDropdown">
+                </div>
+            </div>
 
         </div>
         <button class="btn btn-primary" id="createGame">Create game</button>

@@ -1,4 +1,45 @@
-﻿$("#getSpecificGame").click(function () {
+﻿$(function () {
+
+    getAllDevelopers();
+    getAllPublishers();
+
+    
+
+    $("#publisherDropdown").html();
+
+    function getAllDevelopers() {
+        $.ajax({
+            url: '/api/games/getdevelopers',
+            method: 'GET'
+        }).done(function (result) {
+            let developerData = "";
+
+            $.each(result, function (index, item) {
+                developerData += '<a class="dropdown-item" href="#">' + item.name + '</a>';
+            });
+            $("#developerDropdown").html(developerData);
+        })
+    };
+
+    function getAllPublishers() {
+        $.ajax({
+            url: '/api/games/getpublishers',
+            method: 'GET'
+        }).done(function (result) {
+            let publisherData = "";
+
+            $.each(result, function (index, item) {
+                publisherData += '<a class="dropdown-item" href="#">' + item.name + '</a>';
+            });
+            $("#publisherDropdown").html(publisherData);
+        })
+    };
+
+})
+
+
+    
+$("#getSpecificGame").click(function () {
     let number = $("#gameId").val();
 
     $.ajax({

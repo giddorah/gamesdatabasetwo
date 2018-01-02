@@ -70,5 +70,18 @@ namespace gamesdatabasetwo.Controllers
             //context.AddGame(GameToAdd);
             return Ok(GameToAdd);
         }
+
+        [HttpGet]
+        [Route("getpublishers")]
+        public IActionResult GetPublishers()
+        {
+            return Ok(context.AllPublishers());
+        }
+        [HttpGet]
+        [Route("getdevelopers")]
+        public IActionResult GetDevelopers()
+        {
+            return Ok(context.AllDevelopers());
+        }
     }
 }
