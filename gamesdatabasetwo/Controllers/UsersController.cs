@@ -54,6 +54,7 @@ namespace gamesdatabasetwo.Controllers
             var user = await userManager.FindByEmailAsync(email);
             applicationDbContext.RemoveUser(user);
             return Ok($"User with email {email} has been removed");
+            
         }
     }
 }
