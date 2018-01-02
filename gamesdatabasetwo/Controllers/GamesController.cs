@@ -11,9 +11,9 @@ namespace gamesdatabasetwo.Controllers
     public class GamesController : Controller
     {
 
-        private ApplicationDbContextPartial context;
+        private ApplicationDbContext context;
 
-        public GamesController(ApplicationDbContextPartial context)
+        public GamesController(ApplicationDbContext context)
         {
             this.context = context;
         }
