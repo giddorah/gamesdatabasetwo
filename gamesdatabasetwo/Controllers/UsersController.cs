@@ -57,19 +57,21 @@ namespace gamesdatabasetwo.Controllers
 
         }
 
-        [HttpGet, Route("add")]
+        [HttpPost, Route("add")]
         public async Task<IActionResult> Add(string email)
         {
-            //if (String.IsNullOrEmpty(email))
-            //{
-            //    return BadRequest("Emailadress field can not be empty");
-            //}
+            if (String.IsNullOrEmpty(email))
+            {
+                return BadRequest("Emailadress field can not be empty");
+            }
             try
             {
                 var addr = new System.Net.Mail.MailAddress(email);
                 var user = new ApplicationUser
                 {
-                    Email = email
+                    Email = email,
+                    UserName = email
+                    
                 };
                 var result = await userManager.CreateAsync(user);
                 if (!result.Succeeded)
