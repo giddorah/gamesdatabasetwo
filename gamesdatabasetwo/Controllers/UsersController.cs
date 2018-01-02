@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace gamesdatabasetwo.Controllers
 {
-    [Route("api/Games")]
-    public class GamesController : Controller
+    [Route("api/Users")]
+    public class UsersController : Controller
     {
         [HttpGet]
         [Route("test")]
