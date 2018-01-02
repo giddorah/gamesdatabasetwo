@@ -30,6 +30,7 @@ namespace gamesdatabasetwo.Data
         }
         public Game GameById(int id)
         {
+
             var gameToReturn = Games.Single(i => i.Id == id);
 
             return gameToReturn;
