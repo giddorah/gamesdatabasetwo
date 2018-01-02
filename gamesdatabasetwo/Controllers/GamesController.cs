@@ -58,17 +58,21 @@ namespace gamesdatabasetwo.Controllers
 
         public void DoRefillDatabase()
         {
-            var addPublishers = new List<Publisher>();
-            var addDevelopers = new List<Developer>();
 
-            addPublishers.Add(new Publisher { Name = "Electronic Arts" });
-            addPublishers.Add(new Publisher { Name = "Sausage Party" });
-            addPublishers.Add(new Publisher { Name = "Inferior Software" });
-            addPublishers.Add(new Publisher { Name = "Melissa McGregor Inc." });
-            addDevelopers.Add(new Developer { Name = "Microsoft Studios" });
-            addDevelopers.Add(new Developer { Name = "Playhouse Productions" });
-            addDevelopers.Add(new Developer { Name = "Studio Sentinel" });
-            addDevelopers.Add(new Developer { Name = "Assignation Assimilation" });
+
+            context.AddPublisher(new Publisher { Name = "Electronic Arts" });
+            context.AddPublisher(new Publisher { Name = "Sausage Party" });
+            context.AddPublisher(new Publisher { Name = "Inferior Software" });
+            context.AddPublisher(new Publisher { Name = "Melissa McGregor Inc." });
+            context.AddDeveloper(new Developer { Name = "Microsoft Studios" });
+            context.AddDeveloper(new Developer { Name = "Playhouse Productions" });
+            context.AddDeveloper(new Developer { Name = "Studio Sentinel" });
+            context.AddDeveloper(new Developer { Name = "Assignation Assimilation" });
+
+            var addPublishers = context.AllPublishers();
+            var addDevelopers = context.AllDevelopers();
+
+
 
             int loopNumber = 0;
             int year = 1999;
