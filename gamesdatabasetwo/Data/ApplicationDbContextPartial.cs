@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace gamesdatabasetwo.Data
 {
-    public partial class ApplicationDbContextPartial : IdentityDbContext<ApplicationUser>
+    public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
 
         public DbSet<Game> Games { get; set; }
