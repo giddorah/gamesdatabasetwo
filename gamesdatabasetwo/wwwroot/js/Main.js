@@ -12,12 +12,14 @@
             url: '/api/games/getdevelopers',
             method: 'GET'
         }).done(function (result) {
-            let developerData = "";
+            let developerData = "<option selected>Choose Developer...</option>";
 
+            let number = 1;
             $.each(result, function (index, item) {
-                developerData += '<a class="dropdown-item" href="#">' + item.name + '</a>';
+                developerData += '<option value="' + number + '">' + item.name + '</option>';
+                number++;
             });
-            $("#developerDropdown").html(developerData);
+            $("#developerSelectForm").html(developerData);
         })
     };
 
@@ -26,18 +28,18 @@
             url: '/api/games/getpublishers',
             method: 'GET'
         }).done(function (result) {
-            let publisherData = "";
+            console.log(result);
+            let publisherData = "<option selected>Choose Publisher...</option>";
 
+            let number = 1;
             $.each(result, function (index, item) {
-                publisherData += '<a class="dropdown-item" href="#">' + item.name + '</a>';
+                publisherData += '<option value="' + number + '">' + item.name + '</option>';
+                number++;
             });
-            $("#publisherDropdown").html(publisherData);
+            $("#publisherSelectForm").html(publisherData);
         })
     };
-
 })
-
-
     
 $("#getSpecificGame").click(function () {
     let number = $("#gameId").val();
