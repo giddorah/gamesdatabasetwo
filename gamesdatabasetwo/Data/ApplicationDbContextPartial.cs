@@ -37,6 +37,25 @@ namespace gamesdatabasetwo.Data
             return gameToReturn;
         }
 
+        public List<ViewGameModel> GetAllGamesFromDatabase()
+        {
+            var listOfGamesWithPublisherAndDeveloper = new List<ViewGameModel>();
+
+            foreach (var game in Games)
+            {
+                
+                var gameToList = game;
+                gameToList.Developer = Developers.Single(i => i.Id == gameToList.DeveloperId);
+                gameToList.Publisher = Publishers.Single(i => i.Id == gameToList.PublisherId);
+
+                var viewGameModel = new ViewGameModel { Name = gameToList.Name, Developer = gameToList.Developer.Name, Genre = gameToList.Genre, Platforms = gameToList.Platforms, Publisher = gameToList.Publisher.Name, ReleasedWhere = gameToList.ReleasedWhere, Theme = gameToList.Theme, Year = gameToList.Year };
+
+                listOfGamesWithPublisherAndDeveloper.Add(viewGameModel);
+            }
+
+            return listOfGamesWithPublisherAndDeveloper;
+        }
+
         public void RemoveUser(ApplicationUser user)
         {
            

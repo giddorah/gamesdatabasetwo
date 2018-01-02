@@ -50,6 +50,13 @@ namespace gamesdatabasetwo.Controllers
             }
             
         }
+        [HttpGet]
+        [Route("getallgames")]
+        public IActionResult GetAllGames()
+        {
+            return Ok(context.GetAllGamesFromDatabase());
+        }
+
 
         [HttpGet]
         [Route("refilldatabase")]
