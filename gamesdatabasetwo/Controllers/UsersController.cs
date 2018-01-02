@@ -35,26 +35,56 @@ namespace gamesdatabasetwo.Controllers
         public async Task<IActionResult> SignIn(string email)
         {
             var user = await userManager.FindByEmailAsync(email);
-            
+
             await signInManager.SignInAsync(user, true);
             return Ok($"User with email {email} is signed in");
         }
 
-        [HttpGet,Route("signout")]
-        public IActionResult SignOut()
+        [HttpGet, Route("signout")]
+        public async Task<IActionResult> SignOut()
         {
-            signInManager.SignOutAsync();
+            await signInManager.SignOutAsync();
             return Ok("Signed out");
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost, Route("Remove")]
+        [HttpPost, Route("remove")]
         public async Task<IActionResult> Remove(string email)
         {
             var user = await userManager.FindByEmailAsync(email);
             applicationDbContext.RemoveUser(user);
             return Ok($"User with email {email} has been removed");
-            
+
+        }
+
+        [HttpPost, Route("add")]
+        public async Task<IActionResult> Add(string email)
+        {
+            if (String.IsNullOrEmpty(email))
+            {
+                return BadRequest("Emailadress field can not be empty");
+            }
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                var user = new ApplicationUser
+                {
+                    Email = email
+                };
+                var result = await userManager.CreateAsync(user);
+                if (!result.Succeeded)
+                {
+                    return BadRequest("Email is not valid");
+                }
+                return Ok($"User {email} added");
+            }
+            catch
+            {
+                return BadRequest($"{email} is not a valid emailadress");
+            }
+
+
+
         }
     }
 }
