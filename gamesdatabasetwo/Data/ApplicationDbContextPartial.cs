@@ -12,9 +12,7 @@ namespace gamesdatabasetwo.Data
 
         public DbSet<Game> Games { get; set; }
         public DbSet<Developer> Developers { get; set; }
-
         public DbSet<Publisher> Publishers { get; set; }
-
 
         public void RemoveGame(int id)
         {
@@ -67,13 +65,11 @@ namespace gamesdatabasetwo.Data
 
         public void ClearAllDatabases()
         {
-            var developers = Developers;
-            var publishers = Publishers;
-            var games = Games;
-
-            Developers.RemoveRange(developers);
-            Publishers.RemoveRange(publishers);
-            Games.RemoveRange(games);
+            Games.RemoveRange(Games);
+            SaveChanges();
+            Publishers.RemoveRange(Publishers);
+            SaveChanges();
+            Developers.RemoveRange(Developers);
             SaveChanges();
         }
     }

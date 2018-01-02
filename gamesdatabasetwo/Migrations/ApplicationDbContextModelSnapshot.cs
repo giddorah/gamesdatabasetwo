@@ -80,7 +80,7 @@ namespace gamesdatabasetwo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Developer");
+                    b.ToTable("Developers");
                 });
 
             modelBuilder.Entity("gamesdatabasetwo.Data.Game", b =>
@@ -122,7 +122,7 @@ namespace gamesdatabasetwo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Publisher");
+                    b.ToTable("Publishers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

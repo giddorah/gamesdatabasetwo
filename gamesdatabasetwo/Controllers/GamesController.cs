@@ -73,7 +73,7 @@ namespace gamesdatabasetwo.Controllers
 
 
 
-            int loopNumber = 0;
+            int loopNumber = 1;
             int year = 1999;
             for (int i = 0; i < 10; i++)
             {
@@ -82,13 +82,23 @@ namespace gamesdatabasetwo.Controllers
                     loopNumber = 0;
                 }
 
-                var developer = addDevelopers.Single(o => o.Id == loopNumber);
-                var publisher = addPublishers.Single(o => o.Id == loopNumber);
+                int randomDeveloper = RandomGenerator(addDevelopers.First().Id, addDevelopers.Last().Id);
+                int randomPublisher = RandomGenerator(addPublishers.First().Id, addPublishers.Last().Id);
+
+                var developer = addDevelopers.Single(o => o.Id == randomDeveloper );
+                var publisher = addPublishers.Single(o => o.Id == randomPublisher );
 
                 context.AddGame(new Game { Name = $"Test{i}", Genre = $"TestGenre{i}", Platforms = $"TestPlatform{i}", ReleasedWhere = $"TestWhere{i}", Theme = $"TestTheme{i}", Year = year, Developer = developer, Publisher = publisher });
                 year++;
                 loopNumber++;
             }
+        }
+
+        public int RandomGenerator(int firstNumber, int secondNumber)
+        {
+            var random = new Random();
+            return(random.Next(firstNumber, secondNumber + 1));
+
         }
     }
 }

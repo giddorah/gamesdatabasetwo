@@ -11,8 +11,8 @@ using System;
 namespace gamesdatabasetwo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180102102326_AddGamesDevelopersPublisher")]
-    partial class AddGamesDevelopersPublisher
+    [Migration("20180102120313_TryingToFixDatabases")]
+    partial class TryingToFixDatabases
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -81,7 +81,7 @@ namespace gamesdatabasetwo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Developer");
+                    b.ToTable("Developers");
                 });
 
             modelBuilder.Entity("gamesdatabasetwo.Data.Game", b =>
@@ -123,7 +123,7 @@ namespace gamesdatabasetwo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Publisher");
+                    b.ToTable("Publishers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
