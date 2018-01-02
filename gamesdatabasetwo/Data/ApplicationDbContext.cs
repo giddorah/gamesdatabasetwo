@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace gamesdatabasetwo.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-
-        public DbSet<Game> Game { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -20,25 +18,6 @@ namespace gamesdatabasetwo.Data
         {
             base.OnModelCreating(builder);
         }
-        public void Remove(int id)
-        {
-            var gameToRemove = ById(id);
-            Game.Remove(gameToRemove);
-
-            SaveChanges();
-        }
-
-
-        public void AddCustomer(Game game)
-        {
-            Game.Add(game);
-            SaveChanges();
-        }
-        public Game ById(int id)
-        {
-            var gameToReturn = Game.Single(i => i.Id == id);
-
-            return gameToReturn;
-        }
+       
     }
 }
