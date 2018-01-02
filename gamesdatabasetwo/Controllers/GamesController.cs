@@ -63,8 +63,8 @@ namespace gamesdatabasetwo.Controllers
         [Route("addgame")]
         public IActionResult AddGame(Game GameToAdd)
         {
-            context.AddGame(GameToAdd);
-            return Ok($"Game {GameToAdd.Name} has been added.");
+            //context.AddGame(GameToAdd);
+            return Ok(GameToAdd);
         }
     }
 }
