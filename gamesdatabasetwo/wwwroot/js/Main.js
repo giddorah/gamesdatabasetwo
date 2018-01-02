@@ -9,3 +9,12 @@
         console.log(result);
     })
 });
+
+$("#refillDatabase").click(function () {
+    $.ajax({
+        url: '/api/games/refilldatabase',
+        method: 'GET',
+    }).done(function (result) {
+        console.log(result);
+    })
+});
