@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace gamesdatabasetwo.Controllers
 {
-    [Route("api/Users")]
+    [Route("users")]
     public class UsersController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -40,7 +40,7 @@ namespace gamesdatabasetwo.Controllers
             return Ok($"User with email {email} is signed in");
         }
 
-        [HttpGet, Route("signout")]
+        [HttpPost, Route("signout")]
         public async Task<IActionResult> SignOut()
         {
             await signInManager.SignOutAsync();
@@ -57,13 +57,13 @@ namespace gamesdatabasetwo.Controllers
 
         }
 
-        [HttpPost, Route("add")]
+        [HttpGet, Route("add")]
         public async Task<IActionResult> Add(string email)
         {
-            if (String.IsNullOrEmpty(email))
-            {
-                return BadRequest("Emailadress field can not be empty");
-            }
+            //if (String.IsNullOrEmpty(email))
+            //{
+            //    return BadRequest("Emailadress field can not be empty");
+            //}
             try
             {
                 var addr = new System.Net.Mail.MailAddress(email);
@@ -85,6 +85,21 @@ namespace gamesdatabasetwo.Controllers
 
 
 
+        }
+
+        [HttpPost, Route("edit")]
+        [Authorize]
+        public async Task<IActionResult> Edit(string email)
+        {
+            string userId =  userManager.GetUserId(HttpContext.User);
+            var user = await userManager.FindByIdAsync(userId);
+            var token = await userManager.GenerateChangeEmailTokenAsync(user, email);
+            var result = await userManager.ChangeEmailAsync(user, email, token);
+            if (!result.Succeeded)
+            {
+                return BadRequest("That is not a valid email");
+            }
+            return Ok($"Updated email to {email}");
         }
     }
 }
