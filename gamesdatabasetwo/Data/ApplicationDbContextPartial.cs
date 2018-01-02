@@ -32,7 +32,8 @@ namespace gamesdatabasetwo.Data
         {
 
             var gameToReturn = Games.Single(i => i.Id == id);
-
+            gameToReturn.Developer = Developers.Single(i => i.Id == gameToReturn.Developer.Id);             
+            gameToReturn.Publisher = Publishers.Single(i => i.Id == gameToReturn.Publisher.Id);
             return gameToReturn;
         }
 
