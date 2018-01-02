@@ -42,12 +42,13 @@ namespace gamesdatabasetwo.Controllers
             try
             {
                 var result = context.GameById(id);
+                return Ok(result);
             }
             catch (Exception)
             {
                 return NotFound("No game by that Id found.");
             }
-            return Ok(context.GameById(id));
+            
         }
 
         [HttpGet]
