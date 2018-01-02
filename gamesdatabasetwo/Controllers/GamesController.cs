@@ -58,8 +58,7 @@ namespace gamesdatabasetwo.Controllers
 
         public void DoRefillDatabase()
         {
-
-
+            context.ClearAllDatabases();
             context.AddPublisher(new Publisher { Name = "Electronic Arts" });
             context.AddPublisher(new Publisher { Name = "Sausage Party" });
             context.AddPublisher(new Publisher { Name = "Inferior Software" });

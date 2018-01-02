@@ -64,5 +64,17 @@ namespace gamesdatabasetwo.Data
         {
             return Publishers.ToList();
         }
+
+        public void ClearAllDatabases()
+        {
+            var developers = Developers;
+            var publishers = Publishers;
+            var games = Games;
+
+            Developers.RemoveRange(developers);
+            Publishers.RemoveRange(publishers);
+            Games.RemoveRange(games);
+            SaveChanges();
+        }
     }
 }
