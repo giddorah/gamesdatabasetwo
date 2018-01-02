@@ -16,6 +16,5 @@ namespace gamesdatabasetwo.Data
         public string ReleasedWhere { get; set; }
         public Publisher Publisher { get; set; }
         public Developer Developer { get; set; }
-
     }
 }
