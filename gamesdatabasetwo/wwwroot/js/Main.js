@@ -6,13 +6,32 @@
         method: 'GET',
         data: { id: number }
     }).done(function (result) {
-        console.log(result);
-        let message = '<div class="alert alert-warning alert-dismissible fade show" role="alert">' +
-            '<strong>Found: </strong>' + result.name +
-            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-            '<span aria-hidden="true">&times;</span>' +
-            '</button>' +
-            '</div>';
+        let message = '<table class="table table-striped table-dark">' +
+            '<thead>' +
+            '<tr>' +
+            '<th scope="col">Name</th>' +
+            '<th scope="col">Year</th>' +
+            '<th scope="col">Platforms</th>' +
+            '<th scope="col">Theme</th>' +
+            '<th scope="col">Genre</th>' +
+            '<th scope="col">Location</th>' +
+            '<th scope="col">Publisher</th>' +
+            '<th scope="col">Developer</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+        message += '<tr>';
+        message += '<td>' + result.name + '</td>';
+        message += '<td>' + result.year + '</td>';
+        message += '<td>' + result.platforms + '</td>';
+        message += '<td>' + result.theme + '</td>';
+        message += '<td>' + result.genre + '</td>';
+        message += '<td>' + result.releasedWhere + '</td>';
+        message += '<td>' + result.publisher + '</td>';
+        message += '<td>' + result.developer + '</td>';
+        message += '</tr>';
+        message += '</tbody ></table >'
+
         $("#showResults").html(message);
     })
 });

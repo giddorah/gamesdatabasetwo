@@ -17,7 +17,7 @@ namespace gamesdatabasetwo.Data
         public void RemoveGame(int id)
         {
             var gameToRemove = GameById(id);
-            Games.Remove(gameToRemove);
+            //Games.Remove(gameToRemove);
 
             SaveChanges();
         }
@@ -28,13 +28,15 @@ namespace gamesdatabasetwo.Data
             Games.Add(game);
             SaveChanges();
         }
-        public Game GameById(int id)
+        public ViewGameModel GameById(int id)
         {
 
             var gameToReturn = Games.Single(i => i.Id == id);
             gameToReturn.Developer = Developers.Single(i => i.Id == gameToReturn.DeveloperId);             
             gameToReturn.Publisher = Publishers.Single(i => i.Id == gameToReturn.PublisherId);
-            return gameToReturn;
+
+            var viewGameModel = new ViewGameModel { Name = gameToReturn.Name, Developer = gameToReturn.Developer.Name, Genre = gameToReturn.Genre, Platforms = gameToReturn.Platforms, Publisher = gameToReturn.Publisher.Name, ReleasedWhere = gameToReturn.ReleasedWhere, Theme = gameToReturn.Theme, Year = gameToReturn.Year };
+            return viewGameModel;
         }
 
         public List<ViewGameModel> GetAllGamesFromDatabase()
