@@ -40,9 +40,9 @@ namespace gamesdatabasetwo
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
-            app.UseStaticFiles();
             app.UseAuthentication();
+            app.UseStaticFiles();
+            app.UseMvc();
 
         }
     }
