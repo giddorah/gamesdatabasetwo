@@ -41,7 +41,7 @@ namespace gamesdatabasetwo.Controllers
         {
             try
             {
-                var result = context.GameById(id);
+                var result = context.GameByIdConvertedToViewModel(id);
                 return Ok(result);
             }
             catch (Exception)
@@ -50,6 +50,13 @@ namespace gamesdatabasetwo.Controllers
             }
             
         }
+        [HttpGet]
+        [Route("getallgames")]
+        public IActionResult GetAllGames()
+        {
+            return Ok(context.GetAllGamesFromDatabase());
+        }
+
 
         [HttpGet]
         [Route("refilldatabase")]
