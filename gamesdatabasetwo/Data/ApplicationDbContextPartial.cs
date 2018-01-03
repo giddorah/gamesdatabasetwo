@@ -86,7 +86,7 @@ namespace gamesdatabasetwo.Data
         public void RemoveUser(ApplicationUser user)
         {
            
-            Remove(user);
+            Users.Remove(user);
             SaveChanges();
         }
 
