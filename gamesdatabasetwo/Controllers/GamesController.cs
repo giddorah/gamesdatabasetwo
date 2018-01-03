@@ -28,9 +28,9 @@ namespace gamesdatabasetwo.Controllers
         [Route("removegame")]
         public IActionResult RemoveGame(string name)
         {
-            context.GameByName(name);
-            context.RemoveGame(id);
-            return Ok($"Game with the id {id} has been removed.");
+            var gameToRemove = context.GameByName(name);
+            context.RemoveGame(gameToRemove.Id);
+            return Ok($"Game with the name {gameToRemove.Name} has been removed.");
         }
 
         [HttpGet]
