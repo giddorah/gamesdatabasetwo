@@ -21,5 +21,20 @@ namespace gamesdatabasetwo.Managers
             var sortedList = users.OrderBy(o => o.Email);
             return sortedList;
         }
+
+        internal IOrderedEnumerable<Game> AlphabeticallySortedGames(List<Game> games)
+        {
+            var sortedList = games.OrderBy(o => o.Name);
+            return sortedList;
+        }
+
+        internal IOrderedEnumerable<Game> AlphabeticallySortedGenres(List<Game> games)
+        {
+            var sortedList = games.OrderBy(o => o.Genre);
+            return sortedList;
+        }
+
+
+
     }
 }
