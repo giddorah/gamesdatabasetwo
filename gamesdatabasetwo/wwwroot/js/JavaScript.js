@@ -57,3 +57,15 @@ $("#getAll").click(function () {
         console.log(result);
     })
 });
+
+$("#sortByEmail").click(function () {
+
+
+    $.ajax({
+        url: 'users/sort',
+        method: 'get',
+
+    }).done(function (result) {
+        console.log(result);
+    })
+});
