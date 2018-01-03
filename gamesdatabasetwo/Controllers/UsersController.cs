@@ -17,19 +17,21 @@ namespace gamesdatabasetwo.Controllers
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ApplicationDbContext applicationDbContext;
-        private readonly SortManager sortManager;
+        
 
-        public UsersController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext applicationDbContext, SortManager sortManager)
+        public UsersController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext applicationDbContext)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
             this.applicationDbContext = applicationDbContext;
-            this.sortManager = sortManager;
+           
         }
-        [HttpGet, Route("sort")]
-        public IActionResult Sort()
+
+        [HttpGet, Route("sortbyemail")]
+        public IActionResult SortByEmail()
         {
+            var sortManager = new SortManager(applicationDbContext);
             var users = applicationDbContext.AllUsers();
             var sortedList = sortManager.AlphabeticallySortedUsers(users);
 
