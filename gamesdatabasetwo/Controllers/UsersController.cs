@@ -31,15 +31,18 @@ namespace gamesdatabasetwo.Controllers
             return Ok(userManager.Users);
         }
 
+        [AllowAnonymous]
         [HttpPost, Route("signin")]
         public async Task<IActionResult> SignIn(string email)
         {
+            
             var user = await userManager.FindByEmailAsync(email);
 
             await signInManager.SignInAsync(user, true);
             return Ok($"User with email {email} is signed in");
         }
 
+        [Authorize]
         [HttpPost, Route("signout")]
         public async Task<IActionResult> SignOut()
         {
@@ -47,16 +50,30 @@ namespace gamesdatabasetwo.Controllers
             return Ok("Signed out");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost, Route("remove")]
         public async Task<IActionResult> Remove(string email)
         {
-            var user = await userManager.FindByEmailAsync(email);
-            applicationDbContext.RemoveUser(user);
-            return Ok($"User with email {email} has been removed");
+            string userId = userManager.GetUserId(HttpContext.User);
+            var loggedInUser = await userManager.FindByIdAsync(userId);
+            var result = await userManager.IsInRoleAsync(loggedInUser, "Admin");
+            if (result)
+            {
+                var userToRemove = await userManager.FindByEmailAsync(email);
+                applicationDbContext.Remove(userToRemove);
+                return Ok($"User with email {email} has been removed");
+            }
+
+            if(loggedInUser.Email == email)
+            {
+                applicationDbContext.RemoveUser(loggedInUser);
+                return Ok($"Your account with email {email} has been removed");
+            }
+            return BadRequest("No");
 
         }
 
+        [AllowAnonymous]
         [HttpPost, Route("add")]
         public async Task<IActionResult> Add(string email)
         {
@@ -93,13 +110,19 @@ namespace gamesdatabasetwo.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(string email)
         {
-            string userId =  userManager.GetUserId(HttpContext.User);
+            string userId = userManager.GetUserId(HttpContext.User);
             var user = await userManager.FindByIdAsync(userId);
             var token = await userManager.GenerateChangeEmailTokenAsync(user, email);
             var result = await userManager.ChangeEmailAsync(user, email, token);
             if (!result.Succeeded)
             {
                 return BadRequest("That is not a valid email");
+            }
+
+           var change = await userManager.SetUserNameAsync(user, email);
+            if (!change.Succeeded)
+            {
+                return BadRequest("Not a valid username");
             }
             return Ok($"Updated email to {email}");
         }
