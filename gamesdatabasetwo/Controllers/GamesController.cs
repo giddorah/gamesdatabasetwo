@@ -65,9 +65,9 @@ namespace gamesdatabasetwo.Controllers
 
         [HttpPost]
         [Route("addgame")]
-        public IActionResult AddGame(Game GameToAdd)
+        public IActionResult AddGame(CreateGameModel GameToAdd)
         {
-            //context.AddGame(GameToAdd);
+            context.AddGame(GameToAdd);
             return Ok(GameToAdd);
         }
 
@@ -82,6 +82,12 @@ namespace gamesdatabasetwo.Controllers
         public IActionResult GetDevelopers()
         {
             return Ok(context.AllDevelopers());
+        }
+        [HttpGet]
+        [Route("getgamebyname")]
+        public IActionResult GetGameByName(string name)
+        {
+            return Ok(context.GameByName(name));
         }
     }
 }

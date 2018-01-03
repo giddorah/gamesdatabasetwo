@@ -3,7 +3,7 @@
     getAllDevelopers();
     getAllPublishers();
 
-    
+
 
     $("#publisherDropdown").html();
 
@@ -16,7 +16,7 @@
 
             let number = 1;
             $.each(result, function (index, item) {
-                developerData += '<option value="' + number + '">' + item.name + '</option>';
+                developerData += '<option value="' + item.name + '">' + item.name + '</option>';
                 number++;
             });
             $("#developerSelectForm").html(developerData);
@@ -33,14 +33,14 @@
 
             let number = 1;
             $.each(result, function (index, item) {
-                publisherData += '<option value="' + number + '">' + item.name + '</option>';
+                publisherData += '<option value="' + item.name + '">' + item.name + '</option>';
                 number++;
             });
             $("#publisherSelectForm").html(publisherData);
         })
     };
 })
-    
+
 $("#getSpecificGame").click(function () {
     let number = $("#gameId").val();
 
@@ -62,18 +62,18 @@ $("#getSpecificGame").click(function () {
             '<th scope="col">Developer</th>' +
             '</tr>' +
             '</thead>' +
-            '<tbody>';
-        message += '<tr>';
-        message += '<td>' + result.name + '</td>';
-        message += '<td>' + result.year + '</td>';
-        message += '<td>' + result.platforms + '</td>';
-        message += '<td>' + result.theme + '</td>';
-        message += '<td>' + result.genre + '</td>';
-        message += '<td>' + result.releasedWhere + '</td>';
-        message += '<td>' + result.publisher + '</td>';
-        message += '<td>' + result.developer + '</td>';
-        message += '</tr>';
-        message += '</tbody ></table >'
+            '<tbody>' +
+            '<tr>' +
+            '<td>' + result.name + '</td>' +
+            '<td>' + result.year + '</td>' +
+            '<td>' + result.platforms + '</td>' +
+            '<td>' + result.theme + '</td>' +
+            '<td>' + result.genre + '</td>' +
+            '<td>' + result.releasedWhere + '</td>' +
+            '<td>' + result.publisher + '</td>' +
+            '<td>' + result.developer + '</td>' +
+            '</tr>' +
+            '</tbody></table>';
 
         $("#showResults").html(message);
     })
@@ -101,11 +101,7 @@ $("#getAllGames").click(function () {
             '<th scope="col">Name</th>' +
             '<th scope="col">Year</th>' +
             '<th scope="col">Platforms</th>' +
-            '<th scope="col">Theme</th>' +
-            '<th scope="col">Genre</th>' +
-            '<th scope="col">Location</th>' +
-            '<th scope="col">Publisher</th>' +
-            '<th scope="col">Developer</th>' +
+            '<th scope="col">Additional info</th>' +
             '</tr>' +
             '</thead>' +
             '<tbody>';
@@ -116,18 +112,58 @@ $("#getAllGames").click(function () {
             message += '<td>' + item.name + '</td>';
             message += '<td>' + item.year + '</td>';
             message += '<td>' + item.platforms + '</td>';
-            message += '<td>' + item.theme + '</td>';
-            message += '<td>' + item.genre + '</td>';
-            message += '<td>' + item.releasedWhere + '</td>';
-            message += '<td>' + item.publisher + '</td>';
-            message += '<td>' + item.developer + '</td>';
+            message += '<td><span class="additional" id="' + item.name + '"data-title="Additional"><button class="btn btn-info">A</button></span></td>';
             message += '</tr>';
         });
         message += '</tbody ></table >'
 
         $("#showResults").html(message);
+
+        $(".additional").click(function () {
+            let gameNameToGet = this.id;
+            console.log(gameNameToGet);
+
+            $.ajax({
+                url: '/api/games/getgamebyname',
+                method: 'GET',
+                data: { name: gameNameToGet }
+            }).done(function (result) {
+                console.log(result);
+                showModal(result);
+            })
+        });
     })
 });
+
+function showModal(result) {
+    let message = '<table class="table table-striped table-dark">' +
+        '<thead>' +
+        '<tr>' +
+        '<th scope="col">Name</th>' +
+        '<th scope="col">Year</th>' +
+        '<th scope="col">Platforms</th>' +
+        '<th scope="col">Theme</th>' +
+        '<th scope="col">Genre</th>' +
+        '<th scope="col">Location</th>' +
+        '<th scope="col">Publisher</th>' +
+        '<th scope="col">Developer</th>' +
+        '</tr>' +
+        '</thead>' +
+        '<tbody>' +
+        '<tr>' +
+        '<td>' + result.name + '</td>' +
+        '<td>' + result.year + '</td>' +
+        '<td>' + result.platforms + '</td>' +
+        '<td>' + result.theme + '</td>' +
+        '<td>' + result.genre + '</td>' +
+        '<td>' + result.releasedWhere + '</td>' +
+        '<td>' + result.publisher.name + '</td>' +
+        '<td>' + result.developer.name + '</td>' +
+        '</tr>' +
+        '</tbody></table>';
+    $(".modal-body").html(message);
+    $('#exampleModal').modal('show');
+}
 
 $("#createGame").click(function () {
     let name = $("#gameName").val();
@@ -136,10 +172,9 @@ $("#createGame").click(function () {
     let theme = $("#gameTheme").val();
     let genre = $("#gameGenre").val();
     let releasedWhere = $("#gameReleasedWhere").val();
-    let publisher = $("#gamePublisher").val();
-    let developer = $("#gameDeveloper").val();
+    let publisher = $("#publisherSelectForm").val();
+    let developer = $("#developerSelectForm").val();
 
-    console.log(developer);
     $.ajax({
         url: '/api/games/addgame',
         method: 'POST',

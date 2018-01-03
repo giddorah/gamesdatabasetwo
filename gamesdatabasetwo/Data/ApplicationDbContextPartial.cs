@@ -23,9 +23,10 @@ namespace gamesdatabasetwo.Data
         }
 
 
-        public void AddGame(Game game)
+        public void AddGame(CreateGameModel game)
         {
-            Games.Add(game);
+
+            Games.Add(NewGameConvertedFromCreateGameModelToDbGame(game));
             SaveChanges();
         }
         public Game GameById(int id)
@@ -35,6 +36,25 @@ namespace gamesdatabasetwo.Data
             gameToReturn.Publisher = Publishers.Single(i => i.Id == gameToReturn.PublisherId);
 
             return gameToReturn;
+        }
+
+        public Game GameByName(string name)
+        {
+            var gameToReturn = Games.Single(i => i.Name.Contains(name));
+            gameToReturn.Developer = Developers.Single(i => i.Id == gameToReturn.DeveloperId);
+            gameToReturn.Publisher = Publishers.Single(i => i.Id == gameToReturn.PublisherId);
+
+            return gameToReturn;
+        }
+
+        public Game NewGameConvertedFromCreateGameModelToDbGame(CreateGameModel game)
+        {
+            var developer = Developers.Single(o => o.Name == game.Developer);
+            var publisher = Publishers.Single(o => o.Name == game.Publisher);
+
+            var gameToAdd = new Game { Name = game.Name, Genre = game.Genre, Platforms = game.Platforms, ReleasedWhere = game.ReleasedWhere, Theme = game.Theme, Year = game.Year, Developer = developer, DeveloperId = developer.Id, Publisher = publisher, PublisherId = publisher.Id };
+
+            return gameToAdd;
         }
 
         public ViewGameModel GameByIdConvertedToViewModel(int id)
