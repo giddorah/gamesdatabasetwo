@@ -60,18 +60,17 @@ $("#refillDatabase").click(function () {
         console.log(result);
     });
 });
-
-$("#getAllGames").click(function () {
+function getAllGames(url) {
     $.ajax({
-        url: '/api/games/getAllGames',
+        url: '/api/games/'+url,
         method: 'GET'
     }).done(function (result) {
         let message = '<table class="table table-striped table-dark">' +
             '<thead>' +
             '<tr>' +
             '<th scope="col">#</th>' +
-            '<th scope="col">Name</th>' +
-            '<th scope="col">Year</th>' +
+            '<th scope="col" id="sortByName">Name ↓↑</th>' +
+            '<th scope="col" id="sortByYear">Year ↓↑</th>' +
             '<th scope="col">Platforms</th>' +
             '<th scope="col">Additional info</th>' +
             '</tr>' +
@@ -91,7 +90,12 @@ $("#getAllGames").click(function () {
         message += '</tbody ></table >';
 
         $("#showResults").html(message);
-
+        $("#sortByName").click(function () {
+            getAllGames("sortedByName");
+        })
+        $("#sortByYear").click(function () {
+            getAllGames("sortedByYear");
+        })
         $(".additional").click(function () {
             let gameNameToGet = this.id;
 
@@ -104,6 +108,9 @@ $("#getAllGames").click(function () {
             });
         });
     });
+}
+$("#getAllGames").click(function () {
+    getAllGames("getAllGames")
 });
 
 function showModal(result) {

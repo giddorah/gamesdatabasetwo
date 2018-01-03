@@ -1,5 +1,6 @@
 ﻿using System;
 using gamesdatabasetwo.Data;
+using gamesdatabasetwo.Managers;
 using gamesdatabasetwo.Other;
 using Microsoft.AspNetCore.Mvc;
 
@@ -55,6 +56,23 @@ namespace gamesdatabasetwo.Controllers
             return Ok(context.GetAllGamesFromDatabase());
         }
 
+        [HttpGet, Route("sortedByName")]
+        public IActionResult SortedByName()
+        {
+            var list = context.GetAllGamesFromDatabase();
+            var sortManager = new SortManager(context);
+            var sortedList = sortManager.AlphabeticallySortedGames(list);
+            return Ok(sortedList);
+        }
+
+        [HttpGet, Route("sortedByYear")]
+        public IActionResult SortedByYear()
+        {
+            var list = context.GetAllGamesFromDatabase();
+            var sortManager = new SortManager(context);
+            var sortedList = sortManager.GamesSortedByYear(list);
+            return Ok(sortedList);
+        }
 
         [HttpGet]
         [Route("refilldatabase")]
