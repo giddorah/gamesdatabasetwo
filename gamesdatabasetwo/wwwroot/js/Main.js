@@ -48,33 +48,6 @@ $("#getSpecificGame").click(function () {
         method: 'GET',
         data: { id: number }
     }).done(function (result) {
-        //let message = '<table class="table table-striped table-dark">' +
-        //    '<thead>' +
-        //    '<tr>' +
-        //    '<th scope="col">Name</th>' +
-        //    '<th scope="col">Year</th>' +
-        //    '<th scope="col">Platforms</th>' +
-        //    '<th scope="col">Theme</th>' +
-        //    '<th scope="col">Genre</th>' +
-        //    '<th scope="col">Location</th>' +
-        //    '<th scope="col">Publisher</th>' +
-        //    '<th scope="col">Developer</th>' +
-        //    '</tr>' +
-        //    '</thead>' +
-        //    '<tbody>' +
-        //    '<tr>' +
-        //    '<td>' + result.name + '</td>' +
-        //    '<td>' + result.year + '</td>' +
-        //    '<td>' + result.platforms + '</td>' +
-        //    '<td>' + result.theme + '</td>' +
-        //    '<td>' + result.genre + '</td>' +
-        //    '<td>' + result.releasedWhere + '</td>' +
-        //    '<td>' + result.publisher + '</td>' +
-        //    '<td>' + result.developer + '</td>' +
-        //    '</tr>' +
-        //    '</tbody></table>';
-
-        //$("#showResults").html(message);
         showModal(result);
     })
 });
