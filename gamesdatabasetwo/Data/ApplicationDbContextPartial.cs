@@ -25,7 +25,6 @@ namespace gamesdatabasetwo.Data
 
         public void AddGame(CreateGameModel game)
         {
-
             Games.Add(NewGameConvertedFromCreateGameModelToDbGame(game));
             SaveChanges();
         }
@@ -118,6 +117,23 @@ namespace gamesdatabasetwo.Data
             Publishers.RemoveRange(Publishers);
             SaveChanges();
             Developers.RemoveRange(Developers);
+            SaveChanges();
+        }
+
+        public void EditGame(int id, CreateGameModel gameToEdit)
+        {
+            var gameAfterEdit = GameById(id);
+
+            gameAfterEdit.Name = gameToEdit.Name;
+            gameAfterEdit.Platforms = gameToEdit.Platforms;
+            gameAfterEdit.ReleasedWhere = gameToEdit.ReleasedWhere;
+            gameAfterEdit.Theme = gameToEdit.Theme;
+            gameAfterEdit.Year = gameToEdit.Year;
+            gameAfterEdit.Genre = gameToEdit.Genre;
+            gameAfterEdit.Developer = Developers.Single(i => i.Name.Equals(gameToEdit.Developer));
+            gameAfterEdit.Publisher = Publishers.Single(i => i.Name.Equals(gameToEdit.Publisher));
+
+            Games.Update(gameAfterEdit);
             SaveChanges();
         }
     }

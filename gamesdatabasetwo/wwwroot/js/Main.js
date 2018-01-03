@@ -20,8 +20,8 @@
                 number++;
             });
             $("#developerSelectForm").html(developerData);
-        })
-    };
+        });
+    }
 
     function getAllPublishers() {
         $.ajax({
@@ -36,9 +36,9 @@
                 number++;
             });
             $("#publisherSelectForm").html(publisherData);
-        })
-    };
-})
+        });
+    }
+});
 
 $("#getSpecificGame").click(function () {
     let number = $("#gameId").val();
@@ -49,22 +49,22 @@ $("#getSpecificGame").click(function () {
         data: { id: number }
     }).done(function (result) {
         showModal(result);
-    })
+    });
 });
 
 $("#refillDatabase").click(function () {
     $.ajax({
         url: '/api/games/refilldatabase',
-        method: 'GET',
+        method: 'GET'
     }).done(function (result) {
         console.log(result);
-    })
+    });
 });
 
 $("#getAllGames").click(function () {
     $.ajax({
         url: '/api/games/getAllGames',
-        method: 'GET',
+        method: 'GET'
     }).done(function (result) {
         let message = '<table class="table table-striped table-dark">' +
             '<thead>' +
@@ -87,7 +87,7 @@ $("#getAllGames").click(function () {
             message += '<td><span class="additional" id="' + item.name + '"data-title="Additional"><button class="btn btn-info">A</button></span></td>';
             message += '</tr>';
         });
-        message += '</tbody ></table >'
+        message += '</tbody ></table >';
 
         $("#showResults").html(message);
 
@@ -100,9 +100,9 @@ $("#getAllGames").click(function () {
                 data: { name: gameNameToGet }
             }).done(function (result) {
                 showModal(result);
-            })
+            });
         });
-    })
+    });
 });
 
 function showModal(result) {
@@ -132,29 +132,156 @@ function showModal(result) {
         '</tr>' +
         '</tbody></table>';
 
-    let footer = '<button type="button" id="'+result.name+'" class="btn btn-warning" data-dismiss="modal">Edit</button>' +
-        '<button type="button" id="'+result.name+'" class="btn btn-danger" data-dismiss="modal">Delete</button>' +
+    let footer = '<span class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></span>' +
+        '<span class="delete" id="' + result.name + '"><button type="button" class="btn btn-danger">Delete</button></span>' +
         '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>';
 
     $(".modal-footer").html(footer);
-
     $(".modal-body").html(message);
+
     $('#detailsModal').modal('show');
 
-    $(".btn-warning").click(function () {
+    $(".edit").click(function () {
+        $.ajax({
+            url: '/api/games/getgamebyname',
+            method: 'GET',
+            data: { name: this.id }
+        }).done(function (result) {
+            showEditModal(result);
+        });
 
-    })
+    });
 
-    $(".btn-danger").click(function () {
+    $(".delete").click(function () {
         $.ajax({
             url: '/api/games/removegame',
             method: 'POST',
             data: { name: this.id }
         }).done(function (result) {
             alert(result);
-        })
+        });
+    });
+}
 
-    })
+function showEditModal(result) {
+    //$('#detailsModal').modal('hide');
+
+    let message = '<div class="input-group input-group-sm mb-3">'
+        + '<div class="input-group-prepend" id="'+result.id+'">'
+        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + 'Name:'
+        + '</span>'
+        + '</div>'
+        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="editGameName" value="' + result.name + '"/>'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + 'Year:'
+        + '</span>'
+        + '</div>'
+        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="editGameYear" value="' + result.year + '"/>'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + 'Platforms:'
+        + '</span>'
+        + '</div>'
+        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="editGamePlatforms" value="' + result.platforms + '"/>'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + 'Theme:'
+        + '</span>'
+        + '</div>'
+        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="editGameTheme" value="' + result.theme + '" />'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + 'Genre:'
+        + '</span>'
+        + '</div>'
+        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="editGameGenre" value="' + result.genre + '" />'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + 'Released where:'
+        + '</span>'
+        + '</div>'
+        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="editGameReleasedWhere" value="' + result.releasedWhere + '"/>'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<select class="custom-select my-1 mr-sm-2" id="publisherEditSelectForm"></select>'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<select class="custom-select my-1 mr-sm-2" id="developerEditSelectForm"></select>'
+        + '</div>'
+        + '</div >';
+
+    let footer = '<span class="saveedit"><button type="button" class="btn btn-success" data-dismiss="modal">Save</button></span>' +
+        '<span class="cancel" id="' + result.name + '"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button></span>';
+
+    $(".modal-footer").html(footer);
+    $(".modal-body").html(message);
+
+    $('#detailsModal').modal('show');
+
+    getAllDevelopers(result);
+    getAllPublishers(result);
+
+    function getAllDevelopers(defaultValue) {
+        $.ajax({
+            url: '/api/games/getdevelopers',
+            method: 'GET'
+        }).done(function (result) {
+            let developerData = "<option selected>" + defaultValue.developer.name + "</option>";
+
+            let number = 1;
+            $.each(result, function (index, item) {
+                developerData += '<option value="' + item.name + '">' + item.name + '</option>';
+                number++;
+            });
+            $("#developerEditSelectForm").html(developerData);
+        });
+    }
+
+    function getAllPublishers(defaultValue) {
+        $.ajax({
+            url: '/api/games/getpublishers',
+            method: 'GET'
+        }).done(function (result) {
+            let publisherData = "<option selected>" + defaultValue.publisher.name + "</option>";
+
+            let number = 1;
+            $.each(result, function (index, item) {
+                publisherData += '<option value="' + item.name + '">' + item.name + '</option>';
+                number++;
+            });
+            $("#publisherEditSelectForm").html(publisherData);
+        });
+    }
+
+    $(".saveedit").click(function () {
+        let name = $("#editGameName").val();
+        let year = $("#editGameYear").val();
+        let platforms = $("#editGamePlatforms").val();
+        let theme = $("#editGameTheme").val();
+        let genre = $("#editGameGenre").val();
+        let releasedWhere = $("#editGameReleasedWhere").val();
+        let publisher = $("#publisherEditSelectForm").val();
+        let developer = $("#developerEditSelectForm").val();
+
+        $.ajax({
+            url: '/api/games/editgame',
+            method: 'POST',
+            data: { id: result.id, name: name, year: year, platforms: platforms, theme: theme, genre: genre, releasedWhere: releasedWhere, publisher: publisher, developer: developer }
+        }).done(function (result) {
+        });
+    });
 }
 
 $("#createGame").click(function () {
@@ -172,6 +299,6 @@ $("#createGame").click(function () {
         method: 'POST',
         data: { name: name, year: year, platforms: platforms, theme: theme, genre: genre, releasedWhere: releasedWhere, publisher: publisher, developer: developer }
     }).done(function (result) {
-        
-    })
+
+    });
 });

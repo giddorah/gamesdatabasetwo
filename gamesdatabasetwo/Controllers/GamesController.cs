@@ -90,5 +90,12 @@ namespace gamesdatabasetwo.Controllers
         {
             return Ok(context.GameByName(name));
         }
+        [HttpPost]
+        [Route("editgame")]
+        public IActionResult EditGame(int id, CreateGameModel gameToEdit)
+        {
+            context.EditGame(id, gameToEdit);
+            return Ok($"Id {id} and {gameToEdit.Developer}");
+        }
     }
 }
