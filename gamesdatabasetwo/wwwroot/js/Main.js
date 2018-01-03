@@ -86,6 +86,7 @@ $("#getAllGames").click(function () {
             message += '<td>' + item.platforms + '</td>';
             message += '<td><span class="additional" id="' + item.name + '"data-title="Additional"><button class="btn btn-info">A</button></span></td>';
             message += '</tr>';
+            numberInList++;
         });
         message += '</tbody ></table >';
 
@@ -159,6 +160,12 @@ function showModal(result) {
             data: { name: this.id }
         }).done(function (result) {
             alert(result);
+            $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
+                + 'Game has been deleted.'
+                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button >'
+                + '</div >');
         });
     });
 }
@@ -167,7 +174,7 @@ function showEditModal(result) {
     //$('#detailsModal').modal('hide');
 
     let message = '<div class="input-group input-group-sm mb-3">'
-        + '<div class="input-group-prepend" id="'+result.id+'">'
+        + '<div class="input-group-prepend" id="' + result.id + '">'
         + '<span class="input-group-text" id="inputGroup-sizing-sm">'
         + 'Name:'
         + '</span>'
@@ -280,7 +287,30 @@ function showEditModal(result) {
             method: 'POST',
             data: { id: result.id, name: name, year: year, platforms: platforms, theme: theme, genre: genre, releasedWhere: releasedWhere, publisher: publisher, developer: developer }
         }).done(function (result) {
-        });
+
+            $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                + 'Game has been edited.'
+                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button >'
+                + '</div >');
+
+            }).fail(function (xhr, status, error) {
+
+                let errorMessages = xhr.responseJSON;
+                let concatinatedErrorMessages = "";
+                $.each(errorMessages, function (index, item) {
+
+                    concatinatedErrorMessages += item[0] + " ";
+                });
+
+                $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
+                    + concatinatedErrorMessages
+                    + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                    + '<span aria-hidden="true">&times;</span>'
+                    + '</button >'
+                    + '</div >');
+            });
     });
 }
 
@@ -300,5 +330,27 @@ $("#createGame").click(function () {
         data: { name: name, year: year, platforms: platforms, theme: theme, genre: genre, releasedWhere: releasedWhere, publisher: publisher, developer: developer }
     }).done(function (result) {
 
-    });
+        $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
+            + 'Game has been added.'
+            + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+            + '<span aria-hidden="true">&times;</span>'
+            + '</button >'
+            + '</div >');
+
+        }).fail(function (xhr, status, error) {
+
+            let errorMessages = xhr.responseJSON;
+            let concatinatedErrorMessages = "";
+            $.each(errorMessages, function (index, item) {
+
+                concatinatedErrorMessages += item[0] + " ";
+            });
+
+            $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
+                + concatinatedErrorMessages
+                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button >'
+                + '</div >');
+        });
 });
