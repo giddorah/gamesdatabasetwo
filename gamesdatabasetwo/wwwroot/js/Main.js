@@ -49,33 +49,34 @@ $("#getSpecificGame").click(function () {
         method: 'GET',
         data: { id: number }
     }).done(function (result) {
-        let message = '<table class="table table-striped table-dark">' +
-            '<thead>' +
-            '<tr>' +
-            '<th scope="col">Name</th>' +
-            '<th scope="col">Year</th>' +
-            '<th scope="col">Platforms</th>' +
-            '<th scope="col">Theme</th>' +
-            '<th scope="col">Genre</th>' +
-            '<th scope="col">Location</th>' +
-            '<th scope="col">Publisher</th>' +
-            '<th scope="col">Developer</th>' +
-            '</tr>' +
-            '</thead>' +
-            '<tbody>' +
-            '<tr>' +
-            '<td>' + result.name + '</td>' +
-            '<td>' + result.year + '</td>' +
-            '<td>' + result.platforms + '</td>' +
-            '<td>' + result.theme + '</td>' +
-            '<td>' + result.genre + '</td>' +
-            '<td>' + result.releasedWhere + '</td>' +
-            '<td>' + result.publisher + '</td>' +
-            '<td>' + result.developer + '</td>' +
-            '</tr>' +
-            '</tbody></table>';
+        //let message = '<table class="table table-striped table-dark">' +
+        //    '<thead>' +
+        //    '<tr>' +
+        //    '<th scope="col">Name</th>' +
+        //    '<th scope="col">Year</th>' +
+        //    '<th scope="col">Platforms</th>' +
+        //    '<th scope="col">Theme</th>' +
+        //    '<th scope="col">Genre</th>' +
+        //    '<th scope="col">Location</th>' +
+        //    '<th scope="col">Publisher</th>' +
+        //    '<th scope="col">Developer</th>' +
+        //    '</tr>' +
+        //    '</thead>' +
+        //    '<tbody>' +
+        //    '<tr>' +
+        //    '<td>' + result.name + '</td>' +
+        //    '<td>' + result.year + '</td>' +
+        //    '<td>' + result.platforms + '</td>' +
+        //    '<td>' + result.theme + '</td>' +
+        //    '<td>' + result.genre + '</td>' +
+        //    '<td>' + result.releasedWhere + '</td>' +
+        //    '<td>' + result.publisher + '</td>' +
+        //    '<td>' + result.developer + '</td>' +
+        //    '</tr>' +
+        //    '</tbody></table>';
 
-        $("#showResults").html(message);
+        //$("#showResults").html(message);
+        showModal(result);
     })
 });
 
@@ -161,8 +162,23 @@ function showModal(result) {
         '<td>' + result.developer.name + '</td>' +
         '</tr>' +
         '</tbody></table>';
+
+    let footer = '<button type="button" id="'+result.name+'" class="btn btn-warning" data-dismiss="modal">Edit</button>' +
+        '<button type="button" id="'+result.name+'" class="btn btn-danger" data-dismiss="modal">Delete</button>' +
+        '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>';
+
+    $(".modal-footer").html(footer);
+
     $(".modal-body").html(message);
-    $('#exampleModal').modal('show');
+    $('#detailsModal').modal('show');
+
+    $(".btn-warning").click(function () {
+        alert(this.id);
+    })
+    $(".btn-danger").click(function () {
+        alert(this.id);
+
+    })
 }
 
 $("#createGame").click(function () {

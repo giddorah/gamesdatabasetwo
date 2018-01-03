@@ -14,7 +14,7 @@ namespace gamesdatabasetwo.Data
         public string Theme { get; set; }
         public string Genre { get; set; }
         public string ReleasedWhere { get; set; }
-        public string Publisher { get; set; }
-        public string Developer { get; set; }
+        public Publisher Publisher { get; set; }
+        public Developer Developer { get; set; }
     }
 }

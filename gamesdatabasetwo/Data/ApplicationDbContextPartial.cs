@@ -67,7 +67,7 @@ namespace gamesdatabasetwo.Data
             game.Developer = Developers.Single(i => i.Id == game.DeveloperId);
             game.Publisher = Publishers.Single(i => i.Id == game.PublisherId);
 
-            var viewGameModel = new ViewGameModel { Name = game.Name, Developer = game.Developer.Name, Genre = game.Genre, Platforms = game.Platforms, Publisher = game.Publisher.Name, ReleasedWhere = game.ReleasedWhere, Theme = game.Theme, Year = game.Year };
+            var viewGameModel = new ViewGameModel { Name = game.Name, Developer = game.Developer, Genre = game.Genre, Platforms = game.Platforms, Publisher = game.Publisher, ReleasedWhere = game.ReleasedWhere, Theme = game.Theme, Year = game.Year };
             return viewGameModel;
         }
 

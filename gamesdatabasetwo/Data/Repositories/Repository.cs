@@ -38,7 +38,7 @@ namespace gamesdatabasetwo.Other
                 var developer = addDevelopers.Single(o => o.Id == randomDeveloper);
                 var publisher = addPublishers.Single(o => o.Id == randomPublisher);
 
-                //context.AddGame(new Game { Name = $"Test{i}", Genre = $"TestGenre{i}", Platforms = $"TestPlatform{i}", ReleasedWhere = $"TestWhere{i}", Theme = $"TestTheme{i}", Year = year, Developer = developer, Publisher = publisher });
+                context.AddGame(new CreateGameModel { Name = $"Test{i}", Genre = $"TestGenre{i}", Platforms = $"TestPlatform{i}", ReleasedWhere = $"TestWhere{i}", Theme = $"TestTheme{i}", Year = year, Developer = developer.Name, Publisher = publisher.Name });
                 year++;
                 loopNumber++;
             }
