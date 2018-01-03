@@ -28,7 +28,6 @@
             url: '/api/games/getpublishers',
             method: 'GET'
         }).done(function (result) {
-            console.log(result);
             let publisherData = "<option selected>Choose Publisher...</option>";
 
             let number = 1;
@@ -94,7 +93,6 @@ $("#getAllGames").click(function () {
         url: '/api/games/getAllGames',
         method: 'GET',
     }).done(function (result) {
-        console.log(result);
         let message = '<table class="table table-striped table-dark">' +
             '<thead>' +
             '<tr>' +
@@ -122,14 +120,12 @@ $("#getAllGames").click(function () {
 
         $(".additional").click(function () {
             let gameNameToGet = this.id;
-            console.log(gameNameToGet);
 
             $.ajax({
                 url: '/api/games/getgamebyname',
                 method: 'GET',
                 data: { name: gameNameToGet }
             }).done(function (result) {
-                console.log(result);
                 showModal(result);
             })
         });
@@ -173,10 +169,17 @@ function showModal(result) {
     $('#detailsModal').modal('show');
 
     $(".btn-warning").click(function () {
-        alert(this.id);
+
     })
+
     $(".btn-danger").click(function () {
-        alert(this.id);
+        $.ajax({
+            url: '/api/games/removegame',
+            method: 'POST',
+            data: { name: this.id }
+        }).done(function (result) {
+            alert(result);
+        })
 
     })
 }
@@ -196,6 +199,6 @@ $("#createGame").click(function () {
         method: 'POST',
         data: { name: name, year: year, platforms: platforms, theme: theme, genre: genre, releasedWhere: releasedWhere, publisher: publisher, developer: developer }
     }).done(function (result) {
-        console.log(result);
+        
     })
 });
