@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using gamesdatabasetwo.Data;
+using gamesdatabasetwo.Managers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ namespace gamesdatabasetwo.Controllers
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ApplicationDbContext applicationDbContext;
+        
 
         public UsersController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext applicationDbContext)
         {
@@ -23,12 +25,24 @@ namespace gamesdatabasetwo.Controllers
             this.signInManager = signInManager;
             this.roleManager = roleManager;
             this.applicationDbContext = applicationDbContext;
+           
+        }
+
+        [HttpGet, Route("sortbyemail")]
+        public IActionResult SortByEmail()
+        {
+            var sortManager = new SortManager(applicationDbContext);
+            var users = applicationDbContext.AllUsers();
+            var sortedList = sortManager.AlphabeticallySortedUsers(users);
+
+
+            return Ok(sortedList);
         }
 
         [HttpGet, Route("getall")]
         public IActionResult GetAll()
         {
-            return Ok(userManager.Users);
+            return Ok(applicationDbContext.AllUsers());
         }
 
         [AllowAnonymous]

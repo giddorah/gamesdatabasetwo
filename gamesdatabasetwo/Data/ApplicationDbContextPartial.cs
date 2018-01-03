@@ -82,6 +82,11 @@ namespace gamesdatabasetwo.Data
             return listOfGamesWithPublisherAndDeveloper;
         }
 
+        public List<ApplicationUser> AllUsers()
+        {
+            return Users.ToList();
+        }
+
         public void RemoveUser(ApplicationUser user)
         {
            

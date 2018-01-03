@@ -51,7 +51,19 @@ $("#getAll").click(function () {
 
     $.ajax({
         url: 'users/getall',
-        method: 'get',
+        method: 'GET',
+
+    }).done(function (result) {
+        console.log(result);
+    })
+});
+
+$("#sortByEmail").click(function () {
+
+
+    $.ajax({
+        url: 'users/sortbyemail',
+        method: 'GET',
 
     }).done(function (result) {
         console.log(result);
