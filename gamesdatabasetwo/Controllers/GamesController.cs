@@ -47,7 +47,7 @@ namespace gamesdatabasetwo.Controllers
             {
                 return NotFound("No game by that Id found.");
             }
-            
+
         }
         [HttpGet]
         [Route("getallgames")]
@@ -57,21 +57,26 @@ namespace gamesdatabasetwo.Controllers
         }
 
         [HttpGet, Route("sortedByName")]
-        public IActionResult SortedByName()
+        public IActionResult SortedByName(bool toggle)
         {
             var list = context.GetAllGamesFromDatabase();
             var sortManager = new SortManager(context);
-            var sortedList = sortManager.AlphabeticallySortedGames(list);
+            var sortedList = sortManager.AlphabeticallySortedGames(list, toggle);
             return Ok(sortedList);
         }
 
         [HttpGet, Route("sortedByYear")]
-        public IActionResult SortedByYear()
+        public IActionResult SortedByYear(bool toggle)
         {
             var list = context.GetAllGamesFromDatabase();
             var sortManager = new SortManager(context);
-            var sortedList = sortManager.GamesSortedByYear(list);
+
+            var sortedList = sortManager.GamesSortedByYear(list, toggle);
             return Ok(sortedList);
+
+
+
+
         }
 
         [HttpGet]
@@ -90,18 +95,18 @@ namespace gamesdatabasetwo.Controllers
 
             foreach (var game in gameList)
             {
-                if(game.Name == gameToAdd.Name)
+                if (game.Name == gameToAdd.Name)
                 {
                     ModelState.AddModelError("error", "Could not add game: Duplicate found. ");
                 }
             }
 
-            if(gameToAdd.Year == 0)
+            if (gameToAdd.Year == 0)
             {
                 ModelState.AddModelError("error", "Year can not be empty. ");
                 return BadRequest(ModelState);
             }
-            else if(gameToAdd.Developer == "Choose Developer..." || gameToAdd.Publisher == "Choose Publisher...")
+            else if (gameToAdd.Developer == "Choose Developer..." || gameToAdd.Publisher == "Choose Publisher...")
             {
                 ModelState.AddModelError("error", "Publisher/Developer can not be empty. ");
                 return BadRequest(ModelState);
@@ -139,12 +144,12 @@ namespace gamesdatabasetwo.Controllers
         [Route("editgame")]
         public IActionResult EditGame(int id, CreateGameModel gameToEdit)
         {
-            if(gameToEdit.Year == 0)
+            if (gameToEdit.Year == 0)
             {
                 ModelState.AddModelError("error", "Year can not be empty");
                 return BadRequest(ModelState);
             }
-            else if(ModelState.IsValid)
+            else if (ModelState.IsValid)
             {
                 context.EditGame(id, gameToEdit);
                 return Ok($"Id {id} and {gameToEdit.Developer}");

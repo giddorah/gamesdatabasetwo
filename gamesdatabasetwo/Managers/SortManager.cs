@@ -22,19 +22,32 @@ namespace gamesdatabasetwo.Managers
             return sortedList;
         }
 
-        internal IOrderedEnumerable<ViewGameModel> AlphabeticallySortedGames(List<ViewGameModel> games)
+        internal IOrderedEnumerable<ViewGameModel> AlphabeticallySortedGames(List<ViewGameModel> games, bool toggle)
         {
-            var sortedList = games.OrderBy(o => o.Name);
-            return sortedList;
+            if (toggle)
+            {
+                var sortedList = games.OrderBy(o => o.Name);
+                return sortedList;
+            }
+            var sortedListDescending = games.OrderByDescending(o => o.Name);
+            return sortedListDescending;
+           
         }
 
       
         
 
-        internal IOrderedEnumerable<ViewGameModel> GamesSortedByYear(List<ViewGameModel> games)
+        internal IOrderedEnumerable<ViewGameModel> GamesSortedByYear(List<ViewGameModel> games, bool toggle)
         {
+            if (toggle)
+            {
             var sortedList = games.OrderBy(o => o.Year);
             return sortedList;
+            }
+            var sortedListDescending = games.OrderByDescending(o => o.Year);
+            return sortedListDescending;
         }
+
+       
     }
 }

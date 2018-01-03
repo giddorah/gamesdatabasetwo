@@ -1,4 +1,5 @@
-﻿$(function () {
+﻿let toggle;
+$(function () {
 
     getAllDevelopers();
     getAllPublishers();
@@ -61,9 +62,13 @@ $("#refillDatabase").click(function () {
     });
 });
 function getAllGames(url) {
+   
+    toggle = !toggle;
+    console.log(toggle);
     $.ajax({
-        url: '/api/games/'+url,
-        method: 'GET'
+        url: '/api/games/' + url,
+        method: 'GET',
+        data: { toggle: toggle },
     }).done(function (result) {
         let message = '<table class="table table-striped table-dark">' +
             '<thead>' +
@@ -94,6 +99,7 @@ function getAllGames(url) {
             getAllGames("sortedByName");
         })
         $("#sortByYear").click(function () {
+            
             getAllGames("sortedByYear");
         })
         $(".additional").click(function () {
