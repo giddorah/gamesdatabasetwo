@@ -83,5 +83,11 @@ namespace gamesdatabasetwo.Controllers
         {
             return Ok(context.AllDevelopers());
         }
+        [HttpGet]
+        [Route("getgamebyname")]
+        public IActionResult GetGameByName(string name)
+        {
+            return Ok(context.GameByName(name));
+        }
     }
 }

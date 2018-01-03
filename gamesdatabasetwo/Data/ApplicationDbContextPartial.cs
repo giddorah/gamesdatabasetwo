@@ -38,6 +38,15 @@ namespace gamesdatabasetwo.Data
             return gameToReturn;
         }
 
+        public Game GameByName(string name)
+        {
+            var gameToReturn = Games.Single(i => i.Name.Contains(name));
+            gameToReturn.Developer = Developers.Single(i => i.Id == gameToReturn.DeveloperId);
+            gameToReturn.Publisher = Publishers.Single(i => i.Id == gameToReturn.PublisherId);
+
+            return gameToReturn;
+        }
+
         public Game NewGameConvertedFromCreateGameModelToDbGame(CreateGameModel game)
         {
             var developer = Developers.Single(o => o.Name == game.Developer);
