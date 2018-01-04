@@ -68,7 +68,7 @@ function getAllGames(url) {
     $.ajax({
         url: '/api/games/' + url,
         method: 'GET',
-        data: { toggle: toggle },
+        data: { toggle: toggle }
     }).done(function (result) {
         let message = '<table class="table table-striped table-dark">' +
             '<thead>' +
@@ -97,11 +97,11 @@ function getAllGames(url) {
         $("#showResults").html(message);
         $("#sortByName").click(function () {
             getAllGames("sortedByName");
-        })
+        });
         $("#sortByYear").click(function () {
-            
+
             getAllGames("sortedByYear");
-        })
+        });
         $(".additional").click(function () {
             let gameNameToGet = this.id;
 
@@ -116,7 +116,7 @@ function getAllGames(url) {
     });
 }
 $("#getAllGames").click(function () {
-    getAllGames("getAllGames")
+    getAllGames("getAllGames");
 });
 
 function showModal(result) {

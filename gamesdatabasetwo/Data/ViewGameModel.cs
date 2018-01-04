@@ -1,4 +1,5 @@
-﻿using System;
+﻿using gamesdatabasetwo.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,5 +17,6 @@ namespace gamesdatabasetwo.Data
         public string ReleasedWhere { get; set; }
         public Publisher Publisher { get; set; }
         public Developer Developer { get; set; }
+        public Rating Score { get; set; }
     }
 }

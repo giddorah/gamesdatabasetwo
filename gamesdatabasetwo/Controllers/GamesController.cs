@@ -51,7 +51,7 @@ namespace gamesdatabasetwo.Controllers
         }
         [HttpGet]
         [Route("getallgames")]
-        public IActionResult GetAllGames()
+        public IActionResult GetAllGames(bool toggle)
         {
             return Ok(context.GetAllGamesFromDatabase());
         }
@@ -73,10 +73,6 @@ namespace gamesdatabasetwo.Controllers
 
             var sortedList = sortManager.GamesSortedByYear(list, toggle);
             return Ok(sortedList);
-
-
-
-
         }
 
         [HttpGet]

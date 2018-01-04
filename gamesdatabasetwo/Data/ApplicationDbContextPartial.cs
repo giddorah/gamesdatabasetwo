@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using gamesdatabasetwo.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace gamesdatabasetwo.Data
         public DbSet<Game> Games { get; set; }
         public DbSet<Developer> Developers { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         public void RemoveGame(int id)
         {
@@ -25,14 +27,24 @@ namespace gamesdatabasetwo.Data
 
         public void AddGame(CreateGameModel game)
         {
-            Games.Add(NewGameConvertedFromCreateGameModelToDbGame(game));
+            var newlyCreatedGame = NewGameConvertedFromCreateGameModelToDbGame(game);
+
+            Games.Add(newlyCreatedGame);
             SaveChanges();
         }
+
+        public void AddGameFromGenerator(Game game)
+        {
+            Games.Add(game);
+            SaveChanges();
+        }
+
         public Game GameById(int id)
         {
             var gameToReturn = Games.Single(i => i.Id == id);
             gameToReturn.Developer = Developers.Single(i => i.Id == gameToReturn.DeveloperId);             
             gameToReturn.Publisher = Publishers.Single(i => i.Id == gameToReturn.PublisherId);
+            gameToReturn.Score = Ratings.Single(i => i.Id == gameToReturn.ScoreId);
 
             return gameToReturn;
         }
@@ -42,6 +54,7 @@ namespace gamesdatabasetwo.Data
             var gameToReturn = Games.Single(i => i.Name.Contains(name));
             gameToReturn.Developer = Developers.Single(i => i.Id == gameToReturn.DeveloperId);
             gameToReturn.Publisher = Publishers.Single(i => i.Id == gameToReturn.PublisherId);
+            gameToReturn.Score = Ratings.Single(i => i.Id == gameToReturn.ScoreId);
 
             return gameToReturn;
         }
@@ -50,8 +63,10 @@ namespace gamesdatabasetwo.Data
         {
             var developer = Developers.Single(o => o.Name == game.Developer);
             var publisher = Publishers.Single(o => o.Name == game.Publisher);
+     
+            var scoreToAdd = new Rating { Score = 0, Votes = 0 };
 
-            var gameToAdd = new Game { Name = game.Name, Genre = game.Genre, Platforms = game.Platforms, ReleasedWhere = game.ReleasedWhere, Theme = game.Theme, Year = game.Year, Developer = developer, DeveloperId = developer.Id, Publisher = publisher, PublisherId = publisher.Id };
+            var gameToAdd = new Game { Name = game.Name, Genre = game.Genre, Platforms = game.Platforms, ReleasedWhere = game.ReleasedWhere, Theme = game.Theme, Year = game.Year, Developer = developer, DeveloperId = developer.Id, Publisher = publisher, PublisherId = publisher.Id, Score = scoreToAdd };
 
             return gameToAdd;
         }
@@ -122,6 +137,8 @@ namespace gamesdatabasetwo.Data
             Publishers.RemoveRange(Publishers);
             SaveChanges();
             Developers.RemoveRange(Developers);
+            SaveChanges();
+            Ratings.RemoveRange(Ratings);
             SaveChanges();
         }
 

@@ -1,4 +1,5 @@
 ﻿using gamesdatabasetwo.Data;
+using gamesdatabasetwo.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,8 @@ namespace gamesdatabasetwo.Other
             var addPublishers = context.AllPublishers();
             var addDevelopers = context.AllDevelopers();
 
+            var random = new Random();
+
             int loopNumber = 1;
             int year = 1999;
             for (int i = 0; i < 10; i++)
@@ -38,7 +41,12 @@ namespace gamesdatabasetwo.Other
                 var developer = addDevelopers.Single(o => o.Id == randomDeveloper);
                 var publisher = addPublishers.Single(o => o.Id == randomPublisher);
 
-                context.AddGame(new CreateGameModel { Name = $"Test{i}", Genre = $"TestGenre{i}", Platforms = $"TestPlatform{i}", ReleasedWhere = $"TestWhere{i}", Theme = $"TestTheme{i}", Year = year, Developer = developer.Name, Publisher = publisher.Name });
+                var score = RandomDoubleGenerator(random);
+                var amountOfVotes = RandomGenerator(1, 101);
+
+                var scoreToAdd = new Rating { Score = score, Votes = amountOfVotes };
+
+                context.AddGameFromGenerator(new Game { Name = $"Test{i}", Genre = $"TestGenre{i}", Platforms = $"TestPlatform{i}", ReleasedWhere = $"TestWhere{i}", Theme = $"TestTheme{i}", Year = year, Developer = developer, Publisher = publisher, Score = scoreToAdd });
                 year++;
                 loopNumber++;
             }
@@ -49,6 +57,15 @@ namespace gamesdatabasetwo.Other
             var random = new Random();
             return (random.Next(firstNumber, secondNumber + 1));
 
+        }
+
+        public double RandomDoubleGenerator(Random random)
+        {
+
+            double maximum = 6;
+            double minimum = 0;
+            
+            return random.NextDouble() * (maximum - minimum) + minimum;
         }
     }
 }
