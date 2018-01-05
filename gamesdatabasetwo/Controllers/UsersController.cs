@@ -17,7 +17,7 @@ namespace gamesdatabasetwo.Controllers
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ApplicationDbContext applicationDbContext;
-        
+
 
         public UsersController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext applicationDbContext)
         {
@@ -25,7 +25,44 @@ namespace gamesdatabasetwo.Controllers
             this.signInManager = signInManager;
             this.roleManager = roleManager;
             this.applicationDbContext = applicationDbContext;
-           
+
+        }
+
+        [HttpGet, Route("admintest")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult IsAdmin()
+        {
+            return Ok("You are admin");
+        }
+
+        [HttpGet, Route("returnrole")]
+        public async Task<IActionResult> ReturnRole()
+        {
+            //var normalUser = await userManager.FindByEmailAsync("nomaluser@gmail.com");
+            var publisherUser = await userManager.FindByEmailAsync("publisher@gmail.com");
+            //var normalRole = await userManager.GetRolesAsync(normalUser);
+            var publisherRole = await userManager.GetRolesAsync(publisherUser);
+
+            return Ok(publisherRole);
+        }
+
+
+
+        [HttpGet, Route("TempAdminAdd")]
+        public async Task<IActionResult> AddAdmin()
+        {
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+            var user = new ApplicationUser()
+            {
+                Email = "admin@gmail.com",
+                UserName = "admin@gmail.com"
+            };
+            var result = await userManager.CreateAsync(user);
+            if (!result.Succeeded) return BadRequest("Did not add user");
+
+            var roleResult = await userManager.AddToRoleAsync(user, "Admin");
+            if (!roleResult.Succeeded) return BadRequest("Did not add to role");
+            return Ok($"Admin with email {user.Email} created");
         }
 
         [HttpGet, Route("sortbyemail")]
@@ -49,7 +86,7 @@ namespace gamesdatabasetwo.Controllers
         [HttpPost, Route("signin")]
         public async Task<IActionResult> SignIn(string email)
         {
-            
+
             var user = await userManager.FindByEmailAsync(email);
 
             await signInManager.SignInAsync(user, true);
@@ -78,7 +115,7 @@ namespace gamesdatabasetwo.Controllers
                 return Ok($"User with email {email} has been removed");
             }
 
-            if(loggedInUser.Email == email)
+            if (loggedInUser.Email == email)
             {
                 applicationDbContext.RemoveUser(loggedInUser);
                 return Ok($"Your account with email {email} has been removed");
@@ -98,18 +135,51 @@ namespace gamesdatabasetwo.Controllers
             try
             {
                 var addr = new System.Net.Mail.MailAddress(email);
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await roleManager.CreateAsync(new IdentityRole("Publisher"));
+                await roleManager.CreateAsync(new IdentityRole("User"));
                 var user = new ApplicationUser
                 {
                     Email = email,
                     UserName = email
-                    
+
                 };
-                var result = await userManager.CreateAsync(user);
-                if (!result.Succeeded)
+                if (User.Identity.IsAuthenticated)
                 {
-                    return BadRequest("Email is not valid");
+                    string userId = userManager.GetUserId(HttpContext.User);
+                    var loggedInUser = await userManager.FindByIdAsync(userId);
+                    if (await userManager.IsInRoleAsync(loggedInUser, "Publisher"))
+                    {
+                        var result = await userManager.CreateAsync(user);
+                        if (!result.Succeeded) return BadRequest("Email is not valid");
+
+                        var roleResult = await userManager.AddToRoleAsync(user, "User");
+                        if (!roleResult.Succeeded) return BadRequest("Role does not exist");
+
+                        return Ok($"User {email} added");
+                    }
+
+                    if (await userManager.IsInRoleAsync(loggedInUser, "Admin"))
+                    {
+                        var userResult = await userManager.CreateAsync(user);
+                        if (!userResult.Succeeded) return BadRequest("Email is not valid");
+
+                        var publisherResult = await userManager.AddToRoleAsync(user, "Publisher");
+                        if (!publisherResult.Succeeded) return BadRequest("Role does not exist");
+
+                        return Ok($"User {email} added");
+                    }
                 }
+
+
+                var normalUserresult = await userManager.CreateAsync(user);
+                if (!normalUserresult.Succeeded) return BadRequest("Email is not valid");
+
+                var normalRoleResult = await userManager.AddToRoleAsync(user, "User");
+                if (!normalRoleResult.Succeeded) return BadRequest("Role does not exist");
+
                 return Ok($"User {email} added");
+
             }
             catch
             {
@@ -133,7 +203,7 @@ namespace gamesdatabasetwo.Controllers
                 return BadRequest("That is not a valid email");
             }
 
-           var change = await userManager.SetUserNameAsync(user, email);
+            var change = await userManager.SetUserNameAsync(user, email);
             if (!change.Succeeded)
             {
                 return BadRequest("Not a valid username");
