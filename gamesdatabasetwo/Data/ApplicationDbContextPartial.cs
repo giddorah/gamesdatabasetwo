@@ -143,6 +143,12 @@ namespace gamesdatabasetwo.Data
             SaveChanges();
         }
 
+        public void ChangeScoring(Game gameToChangeScoringOn)
+        {
+            Games.Update(gameToChangeScoringOn);
+            SaveChanges();
+        }
+
         public void EditGame(int id, CreateGameModel gameToEdit)
         {
             var gameAfterEdit = GameById(id);
@@ -155,7 +161,7 @@ namespace gamesdatabasetwo.Data
             gameAfterEdit.Genre = gameToEdit.Genre;
             gameAfterEdit.Developer = Developers.Single(i => i.Name.Equals(gameToEdit.Developer));
             gameAfterEdit.Publisher = Publishers.Single(i => i.Name.Equals(gameToEdit.Publisher));
-            gameAfterEdit.Score = Ratings.Single(i => i.Id == (gameToEdit.ScoreId));
+            gameAfterEdit.Score = Ratings.Single(i => i.Id == (gameAfterEdit.ScoreId));
 
             Games.Update(gameAfterEdit);
             SaveChanges();

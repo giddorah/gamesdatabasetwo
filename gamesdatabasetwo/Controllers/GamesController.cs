@@ -159,5 +159,22 @@ namespace gamesdatabasetwo.Controllers
                 return BadRequest(ModelState);
             }
         }
+
+        [HttpPost]
+        [Route("addScore")]
+        public IActionResult AddScore(string name, int score)
+        {
+            var gameToChangeScoreOn = context.GameByName(name);
+            var previousAmountOfVotes = gameToChangeScoreOn.Score.Votes;
+            var previousScore = gameToChangeScoreOn.Score.Score;
+
+            var currentTotalScore = previousAmountOfVotes * previousScore;
+            var newScore = (currentTotalScore + score) / (previousAmountOfVotes + 1);
+            gameToChangeScoreOn.Score.Score = newScore;
+            gameToChangeScoreOn.Score.Votes++;
+            context.ChangeScoring(gameToChangeScoreOn);
+
+            return Ok(gameToChangeScoreOn.Score);
+        }
     }
 }
