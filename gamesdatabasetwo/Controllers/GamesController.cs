@@ -134,6 +134,10 @@ namespace gamesdatabasetwo.Controllers
         [Route("getgamebyname")]
         public IActionResult GetGameByName(string name)
         {
+            var gottenGame = context.GameByName(name);
+            var gameVM = context.GameByIdConvertedToViewModel(gottenGame.Id);
+
+            // This will return a databasemodel. Need to change.
             return Ok(context.GameByName(name));
         }
         [HttpPost]

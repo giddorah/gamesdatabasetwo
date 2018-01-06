@@ -80,8 +80,9 @@ namespace gamesdatabasetwo.Data
         {
             game.Developer = Developers.Single(i => i.Id == game.DeveloperId);
             game.Publisher = Publishers.Single(i => i.Id == game.PublisherId);
+            game.Score = Ratings.Single(i => i.Id == game.ScoreId);
 
-            var viewGameModel = new ViewGameModel { Name = game.Name, Developer = game.Developer, Genre = game.Genre, Platforms = game.Platforms, Publisher = game.Publisher, ReleasedWhere = game.ReleasedWhere, Theme = game.Theme, Year = game.Year };
+            var viewGameModel = new ViewGameModel { Name = game.Name, Developer = game.Developer, Genre = game.Genre, Platforms = game.Platforms, Publisher = game.Publisher, ReleasedWhere = game.ReleasedWhere, Theme = game.Theme, Year = game.Year, Score = game.Score };
             return viewGameModel;
         }
 
@@ -154,6 +155,7 @@ namespace gamesdatabasetwo.Data
             gameAfterEdit.Genre = gameToEdit.Genre;
             gameAfterEdit.Developer = Developers.Single(i => i.Name.Equals(gameToEdit.Developer));
             gameAfterEdit.Publisher = Publishers.Single(i => i.Name.Equals(gameToEdit.Publisher));
+            gameAfterEdit.Score = Ratings.Single(i => i.Id == (gameToEdit.ScoreId));
 
             Games.Update(gameAfterEdit);
             SaveChanges();

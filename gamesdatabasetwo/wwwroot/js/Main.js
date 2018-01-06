@@ -50,6 +50,7 @@ $("#getSpecificGame").click(function () {
         data: { id: number }
     }).done(function (result) {
         showModal(result);
+        console.log(result);
     });
 });
 
@@ -111,6 +112,7 @@ function getAllGames(url) {
                 data: { name: gameNameToGet }
             }).done(function (result) {
                 showModal(result);
+                console.log(result);
             });
         });
     });
