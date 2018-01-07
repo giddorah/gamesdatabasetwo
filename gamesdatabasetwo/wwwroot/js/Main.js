@@ -50,7 +50,7 @@ $("#getSpecificGame").click(function () {
         data: { id: number }
     }).done(function (result) {
         showModal(result);
-        console.log(result);
+        
     });
 });
 
@@ -59,13 +59,13 @@ $("#refillDatabase").click(function () {
         url: '/api/games/refilldatabase',
         method: 'GET'
     }).done(function (result) {
-        console.log(result);
+        
     });
 });
 function getAllGames(url) {
    
     toggle = !toggle;
-    console.log(toggle);
+    
     $.ajax({
         url: '/api/games/' + url,
         method: 'GET',
@@ -78,6 +78,7 @@ function getAllGames(url) {
             '<th scope="col" id="sortByName">Name ↓↑</th>' +
             '<th scope="col" id="sortByYear">Year ↓↑</th>' +
             '<th scope="col">Platforms</th>' +
+            '<th scope="col">Score</th>' +
             '<th scope="col">Additional info</th>' +
             '</tr>' +
             '</thead>' +
@@ -89,6 +90,7 @@ function getAllGames(url) {
             message += '<td>' + item.name + '</td>';
             message += '<td>' + item.year + '</td>';
             message += '<td>' + item.platforms + '</td>';
+            message += '<td>' + item.score.score.toFixed(2) + '</td>';
             message += '<td><span class="additional" id="' + item.name + '"data-title="Additional"><button class="btn btn-info">A</button></span></td>';
             message += '</tr>';
             numberInList++;
@@ -112,7 +114,7 @@ function getAllGames(url) {
                 data: { name: gameNameToGet }
             }).done(function (result) {
                 showModal(result);
-                console.log(result);
+                
             });
         });
     });
@@ -206,13 +208,13 @@ function showModal(result) {
     $(".sendScore").click(function () {
         let chosenGame = this.id;
         let chosenScore = $("#chosenScore").val();
-        console.log(chosenScore);
+        
         $.ajax({
             url: '/api/games/addscore',
             method: 'POST',
             data: { name: chosenGame, score: chosenScore }
         }).done(function (result) {
-            console.log(result);
+            
             $("#scoreCell").text(result.score.toFixed(2) + " / 5");
             $("#votesCell").text(result.votes);
         });
