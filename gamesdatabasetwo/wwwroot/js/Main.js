@@ -148,7 +148,27 @@ function showModal(result) {
         '</tr>' +
         '</tbody></table>';
 
-    let footer = '<span class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></span>' +
+    message += "<table class='table table-striped'>" +
+        "<thead><tr>" +
+        "<th scope='col'>Rating</th>" +
+        "<th scope='col'>Votes</th>" +
+        "</tr></thead><tbody><tr>" +
+        "<td id='scoreCell'>" + result.score.score.toFixed(2) + " / 5</td>" +
+        "<td id='votesCell'>" + result.score.votes + "</td>" +
+        "</tr></tbody></table>";
+
+
+    let footer = '<div class="input-group input-group-sm mb-3">'
+        + '<select class="custom-select my-1 mr-sm-2" id="chosenScore">' +
+    '<option value="5">5</option>'+
+    '<option value="4">4</option>'+
+    '<option value="3">3</option>'+
+    '<option value="2">2</option>'+
+    '<option value="1">1</option>'+
+    '</select>'
+        + '</div>' +
+        '<span class="sendScore" id="' + result.name + '"><button type="button" class="btn btn-primary">Vote</button></span>' +
+        '<span class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></span>' +
         '<span class="delete" id="' + result.name + '"><button type="button" class="btn btn-danger">Delete</button></span>' +
         '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>';
 
@@ -183,7 +203,23 @@ function showModal(result) {
                 + '</div >');
         });
     });
+    $(".sendScore").click(function () {
+        let chosenGame = this.id;
+        let chosenScore = $("#chosenScore").val();
+        console.log(chosenScore);
+        $.ajax({
+            url: '/api/games/addscore',
+            method: 'POST',
+            data: { name: chosenGame, score: chosenScore }
+        }).done(function (result) {
+            console.log(result);
+            $("#scoreCell").text(result.score.toFixed(2) + " / 5");
+            $("#votesCell").text(result.votes);
+        });
+    })
 }
+
+
 
 function showEditModal(result) {
     //$('#detailsModal').modal('hide');

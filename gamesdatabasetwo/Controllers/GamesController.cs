@@ -161,7 +161,7 @@ namespace gamesdatabasetwo.Controllers
         }
 
         [HttpPost]
-        [Route("addScore")]
+        [Route("addscore")]
         public IActionResult AddScore(string name, int score)
         {
             var gameToChangeScoreOn = context.GameByName(name);
