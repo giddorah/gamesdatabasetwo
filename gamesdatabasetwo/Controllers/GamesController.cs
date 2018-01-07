@@ -51,7 +51,7 @@ namespace gamesdatabasetwo.Controllers
         }
         [HttpGet]
         [Route("getallgames")]
-        public IActionResult GetAllGames(bool toggle)
+        public IActionResult GetAllGames()
         {
             return Ok(context.GetAllGamesFromDatabase());
         }
