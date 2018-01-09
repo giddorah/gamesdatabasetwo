@@ -16,7 +16,7 @@ namespace gamesdatabasetwo.Managers
             this.applicationDbContext = applicationDbContext;
         }
 
-        internal IOrderedEnumerable<ApplicationUser> AlphabeticallySortedUsers(List<ApplicationUser> users)
+        internal IOrderedEnumerable<UserVM> AlphabeticallySortedUsers(List<UserVM> users)
         {
             var sortedList = users.OrderBy(o => o.Email);
             return sortedList;
