@@ -2,6 +2,7 @@
 using gamesdatabasetwo.Data;
 using gamesdatabasetwo.Managers;
 using gamesdatabasetwo.Other;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace gamesdatabasetwo.Controllers
@@ -25,6 +26,7 @@ namespace gamesdatabasetwo.Controllers
             return Ok("This is okay");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("removegame")]
         public IActionResult RemoveGame(string name)
@@ -49,6 +51,7 @@ namespace gamesdatabasetwo.Controllers
             }
 
         }
+
         [HttpGet]
         [Route("getallgames")]
         public IActionResult GetAllGames()
@@ -75,6 +78,7 @@ namespace gamesdatabasetwo.Controllers
             return Ok(sortedList);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("refilldatabase")]
         public IActionResult RefillDatabase()
@@ -83,6 +87,7 @@ namespace gamesdatabasetwo.Controllers
             return Ok("Database refilled");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("cleardatabase")]
         public IActionResult ClearDatabase()
@@ -91,6 +96,7 @@ namespace gamesdatabasetwo.Controllers
             return Ok("Databases cleared");
         }
 
+        [Authorize(Roles = "Admin, Publisher")]
         [HttpPost]
         [Route("addgame")]
         public IActionResult AddGame(CreateGameModel gameToAdd)
@@ -148,6 +154,8 @@ namespace gamesdatabasetwo.Controllers
             // This will return a databasemodel. Need to change.
             return Ok(context.GameByName(name));
         }
+
+        [Authorize(Roles = "Admin, Publisher")]
         [HttpPost]
         [Route("editgame")]
         public IActionResult EditGame(int id, CreateGameModel gameToEdit)
@@ -168,6 +176,7 @@ namespace gamesdatabasetwo.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Route("addscore")]
         public IActionResult AddScore(string name, int score)

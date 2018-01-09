@@ -62,7 +62,7 @@ namespace gamesdatabasetwo.Other
         public double RandomDoubleGenerator(Random random)
         {
 
-            double maximum = 6;
+            double maximum = 5;
             double minimum = 0;
             
             return random.NextDouble() * (maximum - minimum) + minimum;

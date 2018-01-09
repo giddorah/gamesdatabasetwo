@@ -14,7 +14,6 @@ $(function () {
             method: 'GET'
         }).done(function (result) {
             let developerData = "<option selected>Choose Developer...</option>";
-            console.log(result);
             let number = 1;
             $.each(result, function (index, item) {
                 developerData += '<option value="' + item.name + '">' + item.name + '</option>';
