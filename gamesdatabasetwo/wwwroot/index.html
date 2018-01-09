@@ -7,78 +7,79 @@
 </head>
 <body>
     <div class="container">
-        <input type="text" id="gameId" /><br />
-        <button class="btn btn-primary" id="getSpecificGame">GetGame</button><br />
-        <button class="btn btn-primary" id="refillDatabase">Refill the database</button>
-        <button class="btn btn-danger" id="emptyDatabases">Empty databases</button><br />
+        <div id="adminButtons">
+
+        </div>
+
         <button class="btn btn-primary" id="getAllGames">Get All games</button>
         <br /><br />
 
         <span id="results"></span><br />
         <span id="showResults"></span><br />
 
-        <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">
-                    Name:
-                </span>
+        <div id="createArea">
+            <!--<div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                        Name:
+                    </span>
+                </div>
+                <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameName" />
             </div>
-            <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameName" />
-        </div>
-        <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">
-                    Year:
-                </span>
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                        Year:
+                    </span>
+                </div>
+                <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameYear" />
             </div>
-            <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameYear" />
-        </div>
-        <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">
-                    Platforms:
-                </span>
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                        Platforms:
+                    </span>
+                </div>
+                <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gamePlatforms" />
             </div>
-            <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gamePlatforms" />
-        </div>
-        <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">
-                    Theme:
-                </span>
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                        Theme:
+                    </span>
+                </div>
+                <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameTheme" />
             </div>
-            <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameTheme" />
-        </div>
-        <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">
-                    Genre:
-                </span>
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                        Genre:
+                    </span>
+                </div>
+                <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameGenre" />
             </div>
-            <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameGenre" />
-        </div>
-        <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">
-                    Released where:
-                </span>
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">
+                        Released where:
+                    </span>
+                </div>
+                <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameReleasedWhere" />
             </div>
-            <input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameReleasedWhere" />
-        </div>
-        <div class="input-group input-group-sm mb-3">
+            <div class="input-group input-group-sm mb-3">
 
-            <select class="custom-select my-1 mr-sm-2" id="publisherSelectForm"></select>
+                <select class="custom-select my-1 mr-sm-2" id="publisherSelectForm"></select>
 
-        </div>
-        <div class="input-group input-group-sm mb-3">
+            </div>
+            <div class="input-group input-group-sm mb-3">
 
-            <select class="custom-select my-1 mr-sm-2" id="developerSelectForm"></select>
+                <select class="custom-select my-1 mr-sm-2" id="developerSelectForm"></select>
 
-        </div>
-        <button class="btn btn-primary" id="createGame">Create game</button>
+            </div>
+            <button class="btn btn-primary" id="createGame">Create game</button>
+        </div>-->
     </div>
-
-
+</div>
     <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">

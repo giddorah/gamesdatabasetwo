@@ -35,15 +35,22 @@ namespace gamesdatabasetwo.Controllers
             return Ok("You are admin");
         }
 
-        [Authorize]
         [HttpGet, Route("returnrole")]
         public async Task<IActionResult> ReturnRole()
         {
-            string userId = userManager.GetUserId(HttpContext.User);
-            var loggedInUser = await userManager.FindByIdAsync(userId);
-            var result = await userManager.GetRolesAsync(loggedInUser);
+            if (User.Identity.IsAuthenticated)
+            {
+                string userId = userManager.GetUserId(HttpContext.User);
+                var loggedInUser = await userManager.FindByIdAsync(userId);
+                var result = await userManager.GetRolesAsync(loggedInUser);
 
-            return Ok(result);
+                return Ok(result);
+            }
+            else
+            {
+                return Ok("Anonymous");
+            }
+
         }
 
 

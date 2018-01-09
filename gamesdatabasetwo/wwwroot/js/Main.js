@@ -4,6 +4,34 @@ $(function () {
     getAllDevelopers();
     getAllPublishers();
 
+    $.ajax({
+        url: '/users/returnrole',
+        method: 'GET'
+    }).done(function (result) {
+
+        if (result == "Admin") {
+            $("#adminButtons").html('<input type="text" id="gameId" /> <br />' +
+                '<button class="btn btn-primary" id="getSpecificGame">GetGame</button> <br />' +
+                '<button class="btn btn-primary" id="refillDatabase">Refill the database</button>' +
+                '<button class="btn btn-danger" id="emptyDatabases">Empty databases</button> <br />');
+
+            $("#getSpecificGame").click(function () {
+                getSpecificGame();
+            });
+
+            $("#refillDatabase").click(function () {
+                refillDatabase();
+            });
+
+            $("#emptyDatabases").click(function () {
+                emptyDatabase();
+            });
+
+            generateCreateArea();
+        }
+
+    });
+
 
 
     $("#publisherDropdown").html();
@@ -41,7 +69,8 @@ $(function () {
     }
 });
 
-$("#getSpecificGame").click(function () {
+function getSpecificGame() {
+
     let number = $("#gameId").val();
 
     $.ajax({
@@ -50,32 +79,34 @@ $("#getSpecificGame").click(function () {
         data: { id: number }
     }).done(function (result) {
         showModal(result);
-        
-    });
-});
 
-$("#refillDatabase").click(function () {
+    });
+}
+
+function refillDatabase() {
+
     $.ajax({
         url: '/api/games/refilldatabase',
         method: 'GET'
     }).done(function (result) {
-        
-    });
-});
 
-$("#emptyDatabases").click(function () {
+    });
+}
+
+function emptyDatabase() {
     $.ajax({
         url: '/api/games/cleardatabase',
         method: 'POST'
     }).done(function (result) {
 
     });
-});
+}
+
 
 function getAllGames(url) {
-   
+
     toggle = !toggle;
-    
+
     $.ajax({
         url: '/api/games/' + url,
         method: 'GET',
@@ -124,7 +155,7 @@ function getAllGames(url) {
                 data: { name: gameNameToGet }
             }).done(function (result) {
                 showModal(result);
-                
+
             });
         });
     });
@@ -134,8 +165,8 @@ $("#getAllGames").click(function () {
 });
 
 function showModal(result) {
+    let footer = "";
 
-    
     let message = '<table class="table table-striped table-dark">' +
         '<thead>' +
         '<tr>' +
@@ -172,64 +203,80 @@ function showModal(result) {
         "</tr></tbody></table>";
 
 
-    let footer = '<div class="input-group input-group-sm mb-3">'
-        + '<select class="custom-select my-1 mr-sm-2" id="chosenScore">' +
-    '<option value="5">5</option>'+
-    '<option value="4">4</option>'+
-    '<option value="3">3</option>'+
-    '<option value="2">2</option>'+
-    '<option value="1">1</option>'+
-    '</select>'
-        + '</div>' +
-        '<span class="sendScore" id="' + result.name + '"><button type="button" class="btn btn-primary">Vote</button></span>' +
-        '<span class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></span>' +
-        '<span class="delete" id="' + result.name + '"><button type="button" class="btn btn-danger">Delete</button></span>' +
-        '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>';
 
-    $(".modal-footer").html(footer);
+    $.ajax({
+        url: '/users/returnrole',
+        method: 'GET'
+    }).done(function (resultRole) {
+        if (resultRole == "Admin") {
+            footer += '<div class="input-group input-group-sm mb-3">' +
+                '<select class="custom-select my-1 mr-sm-2" id="chosenScore">' +
+                '<option value="5">5</option>' +
+                '<option value="4">4</option>' +
+                '<option value="3">3</option>' +
+                '<option value="2">2</option>' +
+                '<option value="1">1</option>' +
+                '</select>' +
+                '</div>' +
+                '<span class="sendScore" id="' + result.name + '"><button type="button" class="btn btn-primary">Vote</button></span>' +
+                '<div class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></div>' +
+                '<span class="delete" id="' + result.name + '"><button type="button" class="btn btn-danger">Delete</button></span>';
+            $(".modal-footer").html(footer);
+
+            $(".edit").click(function () {
+                $.ajax({
+                    url: '/api/games/getgamebyname',
+                    method: 'GET',
+                    data: { name: result.unEditedName }
+                }).done(function (result) {
+                    showEditModal(result);
+                });
+
+            });
+
+            $(".delete").click(function () {
+                $.ajax({
+                    url: '/api/games/removegame',
+                    method: 'POST',
+                    data: { name: this.id }
+                }).done(function (result) {
+                    alert(result);
+                    $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
+                        + 'Game has been deleted.'
+                        + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                        + '<span aria-hidden="true">&times;</span>'
+                        + '</button >'
+                        + '</div >');
+                });
+            });
+
+            $(".sendScore").click(function () {
+                let chosenGame = this.id;
+                let chosenScore = $("#chosenScore").val();
+
+                $.ajax({
+                    url: '/api/games/addscore',
+                    method: 'POST',
+                    data: { name: chosenGame, score: chosenScore }
+                }).done(function (resultScore) {
+                    $("#scoreCell").text(resultScore.score.toFixed(2) + " / 5");
+                    $("#votesCell").text(resultScore.votes);
+                });
+            });
+        }
+        
+        $(".modal-footer").append('<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>');
+    });
+
+    
+
+    //console.log(footer);
+    //$(".modal-footer").html(footer);
     $(".modal-body").html(message);
 
     $('#detailsModal').modal('show');
 
-    $(".edit").click(function () {
-        $.ajax({
-            url: '/api/games/getgamebyname',
-            method: 'GET',
-            data: { name: result.unEditedName }
-        }).done(function (result) {
-            showEditModal(result);
-        });
 
-    });
-
-    $(".delete").click(function () {
-        $.ajax({
-            url: '/api/games/removegame',
-            method: 'POST',
-            data: { name: this.id }
-        }).done(function (result) {
-            alert(result);
-            $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
-                + 'Game has been deleted.'
-                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                + '<span aria-hidden="true">&times;</span>'
-                + '</button >'
-                + '</div >');
-        });
-    });
-    $(".sendScore").click(function () {
-        let chosenGame = this.id;
-        let chosenScore = $("#chosenScore").val();
-
-        $.ajax({
-            url: '/api/games/addscore',
-            method: 'POST',
-            data: { name: chosenGame, score: chosenScore }
-        }).done(function (resultScore) {
-            $("#scoreCell").text(resultScore.score.toFixed(2) + " / 5");
-            $("#votesCell").text(resultScore.votes);
-        });
-    });
 }
 
 
@@ -359,26 +406,126 @@ function showEditModal(result) {
                 + '</button >'
                 + '</div >');
 
-            }).fail(function (xhr, status, error) {
+        }).fail(function (xhr, status, error) {
 
-                let errorMessages = xhr.responseJSON;
-                let concatinatedErrorMessages = "";
-                $.each(errorMessages, function (index, item) {
+            let errorMessages = xhr.responseJSON;
+            let concatinatedErrorMessages = "";
+            $.each(errorMessages, function (index, item) {
 
-                    concatinatedErrorMessages += item[0] + " ";
-                });
-
-                $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
-                    + concatinatedErrorMessages
-                    + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                    + '<span aria-hidden="true">&times;</span>'
-                    + '</button >'
-                    + '</div >');
+                concatinatedErrorMessages += item[0] + " ";
             });
+
+            $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
+                + concatinatedErrorMessages
+                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button >'
+                + '</div >');
+        });
     });
 }
 
-$("#createGame").click(function () {
+function generateCreateArea() {
+    let message = '<div class="input-group input-group-sm mb-3">'
+        + '<div class="input-group-prepend" id="create">'
+        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + 'Name:'
+        + '</span>'
+        + '</div>'
+        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameName"/>'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + 'Year:'
+        + '</span>'
+        + '</div>'
+        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameYear"/>'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + 'Platforms:'
+        + '</span>'
+        + '</div>'
+        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gamePlatforms"/>'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + 'Theme:'
+        + '</span>'
+        + '</div>'
+        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameTheme"/>'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + 'Genre:'
+        + '</span>'
+        + '</div>'
+        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameGenre"/>'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<div class="input-group-prepend">'
+        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + 'Released where:'
+        + '</span>'
+        + '</div>'
+        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameReleasedWhere"/>'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<select class="custom-select my-1 mr-sm-2" id="publisherSelectForm"></select>'
+        + '</div>'
+        + '<div class="input-group input-group-sm mb-3">'
+        + '<select class="custom-select my-1 mr-sm-2" id="developerSelectForm"></select>'
+        + '</div>'
+        + '<button class="btn btn-primary" id="createGame">Create game</button>'
+        + '</div >';
+
+    getAllDevelopers();
+    getAllPublishers();
+
+    function getAllDevelopers() {
+        $.ajax({
+            url: '/api/games/getdevelopers',
+            method: 'GET'
+        }).done(function (result) {
+            let developerData = "<option selected>Choose Developer...</option>";
+
+            let number = 1;
+            $.each(result, function (index, item) {
+                developerData += '<option value="' + item.name + '">' + item.name + '</option>';
+                number++;
+            });
+            $("#developerSelectForm").html(developerData);
+        });
+    }
+
+    function getAllPublishers() {
+        $.ajax({
+            url: '/api/games/getpublishers',
+            method: 'GET'
+        }).done(function (result) {
+            let publisherData = "<option selected>Choose Publisher...</option>";
+
+            let number = 1;
+            $.each(result, function (index, item) {
+                publisherData += '<option value="' + item.name + '">' + item.name + '</option>';
+                number++;
+            });
+            $("#publisherSelectForm").html(publisherData);
+        });
+    }
+
+    $("#createArea").html(message);
+    $("#createGame").click(function () {
+        createGame();
+    });
+}
+
+function createGame() {
+    console.log("test");
     let name = $("#gameName").val();
     let year = $("#gameYear").val();
     let platforms = $("#gamePlatforms").val();
@@ -401,20 +548,20 @@ $("#createGame").click(function () {
             + '</button >'
             + '</div >');
 
-        }).fail(function (xhr, status, error) {
+    }).fail(function (xhr, status, error) {
 
-            let errorMessages = xhr.responseJSON;
-            let concatinatedErrorMessages = "";
-            $.each(errorMessages, function (index, item) {
+        let errorMessages = xhr.responseJSON;
+        let concatinatedErrorMessages = "";
+        $.each(errorMessages, function (index, item) {
 
-                concatinatedErrorMessages += item[0] + " ";
-            });
-
-            $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
-                + concatinatedErrorMessages
-                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                + '<span aria-hidden="true">&times;</span>'
-                + '</button >'
-                + '</div >');
+            concatinatedErrorMessages += item[0] + " ";
         });
-});
+
+        $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
+            + concatinatedErrorMessages
+            + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+            + '<span aria-hidden="true">&times;</span>'
+            + '</button >'
+            + '</div >');
+    });
+}

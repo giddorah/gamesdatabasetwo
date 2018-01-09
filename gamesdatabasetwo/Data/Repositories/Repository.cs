@@ -63,7 +63,7 @@ namespace gamesdatabasetwo.Other
         {
 
             double maximum = 5;
-            double minimum = 0;
+            double minimum = 1;
             
             return random.NextDouble() * (maximum - minimum) + minimum;
         }
