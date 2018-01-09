@@ -14,6 +14,7 @@ $(function () {
             method: 'GET'
         }).done(function (result) {
             let developerData = "<option selected>Choose Developer...</option>";
+
             let number = 1;
             $.each(result, function (index, item) {
                 developerData += '<option value="' + item.name + '">' + item.name + '</option>';
@@ -133,6 +134,8 @@ $("#getAllGames").click(function () {
 });
 
 function showModal(result) {
+
+    
     let message = '<table class="table table-striped table-dark">' +
         '<thead>' +
         '<tr>' +
@@ -192,7 +195,7 @@ function showModal(result) {
         $.ajax({
             url: '/api/games/getgamebyname',
             method: 'GET',
-            data: { name: this.id }
+            data: { name: result.unEditedName }
         }).done(function (result) {
             showEditModal(result);
         });
@@ -217,26 +220,24 @@ function showModal(result) {
     $(".sendScore").click(function () {
         let chosenGame = this.id;
         let chosenScore = $("#chosenScore").val();
-        
+
         $.ajax({
             url: '/api/games/addscore',
             method: 'POST',
             data: { name: chosenGame, score: chosenScore }
-        }).done(function (result) {
-            
-            $("#scoreCell").text(result.score.toFixed(2) + " / 5");
-            $("#votesCell").text(result.votes);
+        }).done(function (resultScore) {
+            $("#scoreCell").text(resultScore.score.toFixed(2) + " / 5");
+            $("#votesCell").text(resultScore.votes);
         });
-    })
+    });
 }
 
 
 
 function showEditModal(result) {
     //$('#detailsModal').modal('hide');
-
     let message = '<div class="input-group input-group-sm mb-3">'
-        + '<div class="input-group-prepend" id="' + result.id + '">'
+        + '<div class="input-group-prepend" id="' + result.unEditedName + '">'
         + '<span class="input-group-text" id="inputGroup-sizing-sm">'
         + 'Name:'
         + '</span>'
@@ -344,10 +345,11 @@ function showEditModal(result) {
         let publisher = $("#publisherEditSelectForm").val();
         let developer = $("#developerEditSelectForm").val();
 
+
         $.ajax({
             url: '/api/games/editgame',
             method: 'POST',
-            data: { id: result.id, name: name, year: year, platforms: platforms, theme: theme, genre: genre, releasedWhere: releasedWhere, publisher: publisher, developer: developer }
+            data: { nameOfGameToEdit: result.unEditedName, name: name, year: year, platforms: platforms, theme: theme, genre: genre, releasedWhere: releasedWhere, publisher: publisher, developer: developer }
         }).done(function (result) {
 
             $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'

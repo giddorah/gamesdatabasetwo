@@ -149,16 +149,15 @@ namespace gamesdatabasetwo.Controllers
         public IActionResult GetGameByName(string name)
         {
             var gottenGame = context.GameByName(name);
-            var gameVM = context.GameByIdConvertedToViewModel(gottenGame.Id);
+            var gameVM = context.GameByNameConvertedToEditModel(name);
 
-            // This will return a databasemodel. Need to change.
-            return Ok(context.GameByName(name));
+            return Ok(context.GameByNameConvertedToEditModel(name));
         }
 
         [Authorize(Roles = "Admin, Publisher")]
         [HttpPost]
         [Route("editgame")]
-        public IActionResult EditGame(int id, CreateGameModel gameToEdit)
+        public IActionResult EditGame(string nameOfGameToEdit, CreateGameModel gameToEdit)
         {
             if (gameToEdit.Year == 0)
             {
@@ -167,8 +166,8 @@ namespace gamesdatabasetwo.Controllers
             }
             else if (ModelState.IsValid)
             {
-                context.EditGame(id, gameToEdit);
-                return Ok($"Id {id} and {gameToEdit.Developer}");
+                context.EditGame(nameOfGameToEdit, gameToEdit);
+                return Ok($"Id {nameOfGameToEdit} and {gameToEdit.Developer}");
             }
             else
             {
@@ -191,7 +190,9 @@ namespace gamesdatabasetwo.Controllers
             gameToChangeScoreOn.Score.Votes++;
             context.ChangeScoring(gameToChangeScoreOn);
 
-            return Ok(gameToChangeScoreOn.Score);
+            var scoreVM = new ScoreVM { Score = gameToChangeScoreOn.Score.Score, Votes = gameToChangeScoreOn.Score.Votes };
+
+            return Ok(scoreVM);
         }
     }
 }

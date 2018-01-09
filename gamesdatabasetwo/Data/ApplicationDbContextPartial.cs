@@ -51,12 +51,12 @@ namespace gamesdatabasetwo.Data
 
         public Game GameByName(string name)
         {
-            var gameToReturn = Games.Single(i => i.Name.Contains(name));
-            gameToReturn.Developer = Developers.Single(i => i.Id == gameToReturn.DeveloperId);
-            gameToReturn.Publisher = Publishers.Single(i => i.Id == gameToReturn.PublisherId);
-            gameToReturn.Score = Ratings.Single(i => i.Id == gameToReturn.ScoreId);
+            var gameModel = Games.Single(i => i.Name.Contains(name));
+            gameModel.Developer = Developers.Single(i => i.Id == gameModel.DeveloperId);
+            gameModel.Publisher = Publishers.Single(i => i.Id == gameModel.PublisherId);
+            gameModel.Score = Ratings.Single(i => i.Id == gameModel.ScoreId);
 
-            return gameToReturn;
+            return gameModel;
         }
 
         public Game NewGameConvertedFromCreateGameModelToDbGame(CreateGameModel game)
@@ -76,6 +76,11 @@ namespace gamesdatabasetwo.Data
             return GameConvertFromDbModelToViewModel(GameById(id));
         }
 
+        public EditGameModel GameByNameConvertedToEditModel(string name)
+        {
+            return GameConvertFromDbModelToEditGameModel(GameByName(name));
+        }
+
         public ViewGameModel GameConvertFromDbModelToViewModel(Game game)
         {
             game.Developer = Developers.Single(i => i.Id == game.DeveloperId);
@@ -84,6 +89,16 @@ namespace gamesdatabasetwo.Data
 
             var viewGameModel = new ViewGameModel { Name = game.Name, Developer = game.Developer, Genre = game.Genre, Platforms = game.Platforms, Publisher = game.Publisher, ReleasedWhere = game.ReleasedWhere, Theme = game.Theme, Year = game.Year, Score = game.Score };
             return viewGameModel;
+        }
+
+        public EditGameModel GameConvertFromDbModelToEditGameModel(Game game)
+        {
+            game.Developer = Developers.Single(i => i.Id == game.DeveloperId);
+            game.Publisher = Publishers.Single(i => i.Id == game.PublisherId);
+            game.Score = Ratings.Single(i => i.Id == game.ScoreId);
+
+            var editGameModel = new EditGameModel { Name = game.Name, UnEditedName = game.Name, Developer = game.Developer, Genre = game.Genre, Platforms = game.Platforms, Publisher = game.Publisher, ReleasedWhere = game.ReleasedWhere, Theme = game.Theme, Year = game.Year, Score = game.Score };
+            return editGameModel;
         }
 
         public List<ViewGameModel> GetAllGamesFromDatabase()
@@ -122,13 +137,29 @@ namespace gamesdatabasetwo.Data
             SaveChanges();
         }
 
-        public List<Developer> AllDevelopers()
+        public List<DeveloperVM> AllDevelopers()
         {
-            return Developers.ToList();
+            var listOfDeveloperVM = new List<DeveloperVM>();
+
+            foreach (var developer in Developers)
+            {
+                var developerVM = new DeveloperVM { Name = developer.Name };
+                listOfDeveloperVM.Add(developerVM);
+            }
+
+            return listOfDeveloperVM;
         }
-        public List<Publisher> AllPublishers()
+        public List<PublisherVM> AllPublishers()
         {
-            return Publishers.ToList();
+            var listOfPublisherVM = new List<PublisherVM>();
+
+            foreach (var publisher in Publishers)
+            {
+                var publisherVM = new PublisherVM { Name = publisher.Name };
+                listOfPublisherVM.Add(publisherVM);
+            }
+
+            return listOfPublisherVM;
         }
 
         public void ClearAllDatabases()
@@ -149,9 +180,9 @@ namespace gamesdatabasetwo.Data
             SaveChanges();
         }
 
-        public void EditGame(int id, CreateGameModel gameToEdit)
+        public void EditGame(string id, CreateGameModel gameToEdit)
         {
-            var gameAfterEdit = GameById(id);
+            var gameAfterEdit = GameByName(id);
 
             gameAfterEdit.Name = gameToEdit.Name;
             gameAfterEdit.Platforms = gameToEdit.Platforms;
