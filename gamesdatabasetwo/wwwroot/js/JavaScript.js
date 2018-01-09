@@ -10,6 +10,18 @@
     })
 });
 
+$("#removeUser").click(function () {
+    let email = $("#removeUserEmail").val();
+    console.log(email);
+    $.ajax({
+        url: '/users/remove',
+        method: 'POST',
+        data: { email: email }
+    }).done(function (result) {
+        console.log(result);
+    })
+});
+
 $("#createUser").click(function () {
     let email = $("#userEmail").val();
     console.log(email);
