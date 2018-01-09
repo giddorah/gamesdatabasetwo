@@ -113,9 +113,14 @@ namespace gamesdatabasetwo.Data
             return listOfGamesWithPublisherAndDeveloper;
         }
 
-        public List<ApplicationUser> AllUsers()
+        public List<UserVM> AllUsers()
         {
-            return Users.ToList();
+            var listOfUsers = new List<UserVM>();
+            foreach (var user in Users)
+            {
+                listOfUsers.Add(new UserVM { Email = user.Email });
+            }
+            return listOfUsers;
         }
 
         public void RemoveUser(ApplicationUser user)
