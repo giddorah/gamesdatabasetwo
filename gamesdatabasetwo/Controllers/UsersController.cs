@@ -35,15 +35,15 @@ namespace gamesdatabasetwo.Controllers
             return Ok("You are admin");
         }
 
+        [Authorize]
         [HttpGet, Route("returnrole")]
         public async Task<IActionResult> ReturnRole()
         {
-            //var normalUser = await userManager.FindByEmailAsync("nomaluser@gmail.com");
-            var publisherUser = await userManager.FindByEmailAsync("publisher@gmail.com");
-            //var normalRole = await userManager.GetRolesAsync(normalUser);
-            var publisherRole = await userManager.GetRolesAsync(publisherUser);
+            string userId = userManager.GetUserId(HttpContext.User);
+            var loggedInUser = await userManager.FindByIdAsync(userId);
+            var result = await userManager.GetRolesAsync(loggedInUser);
 
-            return Ok(publisherRole);
+            return Ok(result);
         }
 
 
@@ -101,26 +101,13 @@ namespace gamesdatabasetwo.Controllers
             return Ok("Signed out");
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost, Route("remove")]
         public async Task<IActionResult> Remove(string email)
         {
-            string userId = userManager.GetUserId(HttpContext.User);
-            var loggedInUser = await userManager.FindByIdAsync(userId);
-            var result = await userManager.IsInRoleAsync(loggedInUser, "Admin");
-            if (result)
-            {
-                var userToRemove = await userManager.FindByEmailAsync(email);
-                applicationDbContext.Remove(userToRemove);
-                return Ok($"User with email {email} has been removed");
-            }
-
-            if (loggedInUser.Email == email)
-            {
-                applicationDbContext.RemoveUser(loggedInUser);
-                return Ok($"Your account with email {email} has been removed");
-            }
-            return BadRequest("No");
+            var userToRemove = await userManager.FindByEmailAsync(email);
+            applicationDbContext.RemoveUser(userToRemove);
+            return Ok($"User with email {email} has been removed");
 
         }
 
