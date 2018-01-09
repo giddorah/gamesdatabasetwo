@@ -21,8 +21,8 @@ namespace gamesdatabasetwo.Other
             context.AddDeveloper(new Developer { Name = "Studio Sentinel" });
             context.AddDeveloper(new Developer { Name = "Assignation Assimilation" });
 
-            var addPublishers = context.AllPublishers();
-            var addDevelopers = context.AllDevelopers();
+            var addPublishers = context.Publishers;
+            var addDevelopers = context.Developers;
 
             var random = new Random();
 
