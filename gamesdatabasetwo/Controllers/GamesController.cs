@@ -84,6 +84,14 @@ namespace gamesdatabasetwo.Controllers
         }
 
         [HttpPost]
+        [Route("cleardatabase")]
+        public IActionResult ClearDatabase()
+        {
+            context.ClearAllDatabases();
+            return Ok("Databases cleared");
+        }
+
+        [HttpPost]
         [Route("addgame")]
         public IActionResult AddGame(CreateGameModel gameToAdd)
         {

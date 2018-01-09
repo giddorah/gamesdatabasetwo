@@ -25,7 +25,7 @@ namespace gamesdatabasetwo.Data
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Theme { get; set; }
 
-        [StringLength(15, ErrorMessage = "Genre can not be longer than 15 characters. ")]
+        [StringLength(50, ErrorMessage = "Genre can not be longer than 50 characters. ")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Genre can not be empty. ")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Genre { get; set; }
