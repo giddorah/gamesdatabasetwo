@@ -26,10 +26,9 @@ $(function () {
             $("#emptyDatabases").click(function () {
                 emptyDatabase();
             });
-
-            if (result == "Admin" || result == "Publisher") {
-                generateCreateArea();
-            }
+        }
+        if (result == "Admin" || result == "Publisher") {
+            generateCreateArea();
         }
     });
 
