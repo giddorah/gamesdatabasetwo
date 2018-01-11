@@ -98,6 +98,63 @@ namespace gamesdatabasetwo.Controllers
 
         [Authorize(Roles = "Admin, Publisher")]
         [HttpPost]
+        [Route("addpublisher")]
+        public IActionResult AddPublisher(PublisherCreateModel publisherToAdd)
+        {
+            var publisherList = context.AllPublishers();
+
+            foreach (var publisher in publisherList)
+            {
+                if (publisher.Name == publisherToAdd.Name)
+                {
+                    ModelState.AddModelError("error", "Could not add publisher: Duplicate found. ");
+                }
+            }
+
+            if(ModelState.IsValid)
+            {
+                var publisherToAddDbModel = new Publisher();
+                publisherToAddDbModel.Name = publisherToAdd.Name;
+                context.AddPublisher(publisherToAddDbModel);
+                return Ok(publisherToAdd);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
+        [Authorize(Roles = "Admin, Publisher")]
+        [HttpPost]
+        [Route("adddeveloper")]
+        public IActionResult AddDeveloper(DeveloperCreateModel developerToAdd)
+        {
+            var developerList = context.AllDevelopers();
+
+            foreach (var developer in developerList)
+            {
+                if (developer.Name == developerToAdd.Name)
+                {
+                    ModelState.AddModelError("error", "Could not add developer: Duplicate found. ");
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                var developerToAddDbModel = new Developer();
+                developerToAddDbModel.Name = developerToAdd.Name;
+                context.AddDeveloper(developerToAddDbModel);
+                return Ok(developerToAdd);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
+
+        [Authorize(Roles = "Admin, Publisher")]
+        [HttpPost]
         [Route("addgame")]
         public IActionResult AddGame(CreateGameModel gameToAdd)
         {
