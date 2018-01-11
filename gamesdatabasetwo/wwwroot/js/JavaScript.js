@@ -1,5 +1,5 @@
 ﻿$(function () {
-
+    console.log("HejKorv");
     generateContent();
 
     
