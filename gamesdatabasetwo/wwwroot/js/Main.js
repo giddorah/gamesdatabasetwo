@@ -220,7 +220,7 @@ function showModal(result) {
                 '</div>' +
                 '<span class="sendScore" id="' + result.name + '"><button type="button" class="btn btn-primary">Vote</button></span>';
             if (resultRole == "Admin") {
-               footer + '<div class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></div>' +
+               footer += '<div class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></div>' +
                     '<span class="delete" id="' + result.name + '"><button type="button" class="btn btn-danger">Delete</button></span>';
             }
 
