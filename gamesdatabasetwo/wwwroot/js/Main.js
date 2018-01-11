@@ -202,13 +202,13 @@ function showModal(result) {
         "<td id='votesCell'>" + result.score.votes + "</td>" +
         "</tr></tbody></table>";
 
-
+    $(".modal-footer").html("");
 
     $.ajax({
         url: '/users/returnrole',
         method: 'GET'
     }).done(function (resultRole) {
-        if (resultRole == "Admin") {
+        if (resultRole == "Admin" || resultRole == "User" || resultRole == "Publisher") {
             footer += '<div class="input-group input-group-sm mb-3">' +
                 '<select class="custom-select my-1 mr-sm-2" id="chosenScore">' +
                 '<option value="5">5</option>' +
@@ -218,9 +218,12 @@ function showModal(result) {
                 '<option value="1">1</option>' +
                 '</select>' +
                 '</div>' +
-                '<span class="sendScore" id="' + result.name + '"><button type="button" class="btn btn-primary">Vote</button></span>' +
-                '<div class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></div>' +
-                '<span class="delete" id="' + result.name + '"><button type="button" class="btn btn-danger">Delete</button></span>';
+                '<span class="sendScore" id="' + result.name + '"><button type="button" class="btn btn-primary">Vote</button></span>';
+            if (resultRole == "Admin") {
+               footer + '<div class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></div>' +
+                    '<span class="delete" id="' + result.name + '"><button type="button" class="btn btn-danger">Delete</button></span>';
+            }
+
             $(".modal-footer").html(footer);
 
             $(".edit").click(function () {
