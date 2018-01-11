@@ -8,7 +8,7 @@ namespace gamesdatabasetwo.Data
 {
     public class DeveloperCreateModel
     {
-        [StringLength(15, ErrorMessage = "Name can not be longer than 25 characters. ")]
+        [StringLength(25, ErrorMessage = "Name can not be longer than 25 characters. ")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Name can not be empty. ")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Name { get; set; }
