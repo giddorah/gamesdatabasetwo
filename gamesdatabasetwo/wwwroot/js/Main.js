@@ -270,21 +270,15 @@ function showModal(result) {
         $(".modal-footer").append('<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>');
     });
 
-    
-
-    //console.log(footer);
-    //$(".modal-footer").html(footer);
     $(".modal-body").html(message);
 
     $('#detailsModal').modal('show');
-
 
 }
 
 
 
 function showEditModal(result) {
-    //$('#detailsModal').modal('hide');
     let message = '<div class="input-group input-group-sm mb-3">'
         + '<div class="input-group-prepend" id="' + result.unEditedName + '">'
         + '<span class="input-group-text" id="inputGroup-sizing-sm">'
