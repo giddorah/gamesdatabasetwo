@@ -93,10 +93,19 @@ namespace gamesdatabasetwo.Controllers
         [HttpPost, Route("signin")]
         public async Task<IActionResult> SignIn(string email)
         {
+            try
+            {
+                var user = await userManager.FindByEmailAsync(email);
+                await signInManager.SignInAsync(user, true);
+            }
+            catch (Exception)
+            {
 
-            var user = await userManager.FindByEmailAsync(email);
-
-            await signInManager.SignInAsync(user, true);
+                return BadRequest($"User with {email} does not exist");
+            }
+            
+            
+            
             return Ok($"User with email {email} is signed in");
         }
 
