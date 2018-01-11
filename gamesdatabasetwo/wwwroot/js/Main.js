@@ -27,9 +27,10 @@ $(function () {
                 emptyDatabase();
             });
 
-            generateCreateArea();
+            if (result == "Admin" || result == "Publisher") {
+                generateCreateArea();
+            }
         }
-
     });
 
 
