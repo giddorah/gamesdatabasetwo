@@ -8,7 +8,6 @@ $(function () {
         url: '/users/returnrole',
         method: 'GET'
     }).done(function (result) {
-
         if (result == "Admin") {
             $("#adminButtons").html('<input type="text" id="gameId" /> <br />' +
                 '<button class="btn btn-primary" id="getSpecificGame">GetGame</button> <br />' +
@@ -132,7 +131,7 @@ function getAllGames(url) {
             message += '<td>' + item.year + '</td>';
             message += '<td>' + item.platforms + '</td>';
             message += '<td>' + item.score.score.toFixed(2) + '</td>';
-            message += '<td><span class="additional" id="' + item.name + '"data-title="Additional"><button class="btn btn-info">A</button></span></td>';
+            message += '<td style="width: 50px"><span class="additional" id="' + item.name + '"data-title="Additional"><button class="btn btn-info">A</button></span></td>';
             message += '</tr>';
             numberInList++;
         });
