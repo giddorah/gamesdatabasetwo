@@ -18,5 +18,7 @@ namespace gamesdatabasetwo.Data
         {
             base.OnModelCreating(builder);
         }
+
+
     }
 }

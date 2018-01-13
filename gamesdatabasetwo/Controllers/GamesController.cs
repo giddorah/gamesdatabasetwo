@@ -3,6 +3,7 @@ using gamesdatabasetwo.Data;
 using gamesdatabasetwo.Managers;
 using gamesdatabasetwo.Other;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace gamesdatabasetwo.Controllers
@@ -12,10 +13,12 @@ namespace gamesdatabasetwo.Controllers
     {
         private ApplicationDbContext context;
         private Repository repository = new Repository();
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public GamesController(ApplicationDbContext context)
+        public GamesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             this.context = context;
+            this.userManager = userManager;
 
         }
 
@@ -40,10 +43,19 @@ namespace gamesdatabasetwo.Controllers
         [Route("getspecificgame")]
         public IActionResult GetSpecificGame(int id)
         {
+            var result = new ViewGameModel();
             try
             {
-                var result = context.GameByIdConvertedToViewModel(id);
+                result = context.GameByIdConvertedToViewModel(id);
+
+                if (context.CheckIfUserHasAlreadyVoted(userManager.GetUserId(HttpContext.User), id))
+                {
+                    result.Score.Id = -1;
+                    return Ok(result);
+                }
+
                 return Ok(result);
+
             }
             catch (Exception)
             {
@@ -111,7 +123,7 @@ namespace gamesdatabasetwo.Controllers
                 }
             }
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var publisherToAddDbModel = new Publisher();
                 publisherToAddDbModel.Name = publisherToAdd.Name;
@@ -205,10 +217,22 @@ namespace gamesdatabasetwo.Controllers
         [Route("getgamebyname")]
         public IActionResult GetGameByName(string name)
         {
-            var gottenGame = context.GameByName(name);
-            var gameVM = context.GameByNameConvertedToEditModel(name);
+            var result = context.GameByNameConvertedToEditModel(name);
+            var dbModel = context.GameByName(name);
 
-            return Ok(context.GameByNameConvertedToEditModel(name));
+
+            if (context.CheckIfUserHasAlreadyVoted(userManager.GetUserId(HttpContext.User), dbModel.Id))
+            {
+                result.Score.Id = -1;
+                return Ok(result);
+            }
+
+            return Ok(result);
+
+
+
+
+            //return Ok(context.GameByNameConvertedToEditModel(name));
         }
 
         [Authorize(Roles = "Admin, Publisher")]
@@ -238,18 +262,26 @@ namespace gamesdatabasetwo.Controllers
         public IActionResult AddScore(string name, int score)
         {
             var gameToChangeScoreOn = context.GameByName(name);
-            var previousAmountOfVotes = gameToChangeScoreOn.Score.Votes;
-            var previousScore = gameToChangeScoreOn.Score.Score;
+            if (context.CheckIfUserHasAlreadyVoted(userManager.GetUserId(HttpContext.User), gameToChangeScoreOn.Id))
+            {
+                return BadRequest("User has already voted.");
+            }
+            else
+            {
+                var previousAmountOfVotes = gameToChangeScoreOn.Score.Votes;
+                var previousScore = gameToChangeScoreOn.Score.Score;
 
-            var currentTotalScore = previousAmountOfVotes * previousScore;
-            var newScore = (currentTotalScore + score) / (previousAmountOfVotes + 1);
-            gameToChangeScoreOn.Score.Score = newScore;
-            gameToChangeScoreOn.Score.Votes++;
-            context.ChangeScoring(gameToChangeScoreOn);
+                var currentTotalScore = previousAmountOfVotes * previousScore;
+                var newScore = (currentTotalScore + score) / (previousAmountOfVotes + 1);
+                gameToChangeScoreOn.Score.Score = newScore;
+                gameToChangeScoreOn.Score.Votes++;
+                context.ChangeScoring(gameToChangeScoreOn);
+                context.AddRelationUserAndGame(userManager.GetUserId(HttpContext.User), gameToChangeScoreOn.Id);
 
-            var scoreVM = new ScoreVM { Score = gameToChangeScoreOn.Score.Score, Votes = gameToChangeScoreOn.Score.Votes };
+                var scoreVM = new ScoreVM { Score = gameToChangeScoreOn.Score.Score, Votes = gameToChangeScoreOn.Score.Votes };
 
-            return Ok(scoreVM);
+                return Ok(scoreVM);
+            }
         }
     }
 }

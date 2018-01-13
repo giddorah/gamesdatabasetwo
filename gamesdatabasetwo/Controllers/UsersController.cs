@@ -188,9 +188,6 @@ namespace gamesdatabasetwo.Controllers
             {
                 return BadRequest($"{email} is not a valid emailadress");
             }
-
-
-
         }
 
         [HttpPost, Route("edit")]

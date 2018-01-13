@@ -1,4 +1,5 @@
-﻿using gamesdatabasetwo.Data.Models;
+﻿using gamesdatabasetwo.Data.Enitites;
+using gamesdatabasetwo.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,6 +16,7 @@ namespace gamesdatabasetwo.Data
         public DbSet<Developer> Developers { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<RelationBetweenRatingAndUser> RatingsRelations { get; set; }
 
         public void RemoveGame(int id)
         {
@@ -123,6 +125,18 @@ namespace gamesdatabasetwo.Data
             return listOfUsers;
         }
 
+        internal bool CheckIfUserHasAlreadyVoted(string userId, int gameId)
+        {
+            foreach (var relation in RatingsRelations)
+            {
+                if (relation.RatingId == gameId && relation.UserId == userId)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void RemoveUser(ApplicationUser user)
         {
            
@@ -182,6 +196,13 @@ namespace gamesdatabasetwo.Data
         public void ChangeScoring(Game gameToChangeScoringOn)
         {
             Games.Update(gameToChangeScoringOn);
+            SaveChanges();
+        }
+
+        public void AddRelationUserAndGame(string userId, int gameId)
+        {
+            var relation = new RelationBetweenRatingAndUser { UserId = userId, RatingId = gameId };
+            RatingsRelations.Add(relation);
             SaveChanges();
         }
 

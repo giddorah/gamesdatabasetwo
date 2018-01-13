@@ -305,7 +305,7 @@ $("#getAllGames").click(function () {
 
 function showModal(result) {
     let footer = "";
-
+    console.log(result.score.id);
     let message = '<table class="table table-striped table-dark">' +
         '<thead>' +
         '<tr>' +
@@ -348,16 +348,20 @@ function showModal(result) {
         method: 'GET'
     }).done(function (resultRole) {
         if (resultRole == "Admin" || resultRole == "User" || resultRole == "Publisher") {
-            footer += '<div class="input-group input-group-sm mb-3">' +
-                '<select class="custom-select my-1 mr-sm-2" id="chosenScore">' +
-                '<option value="5">5</option>' +
-                '<option value="4">4</option>' +
-                '<option value="3">3</option>' +
-                '<option value="2">2</option>' +
-                '<option value="1">1</option>' +
-                '</select>' +
-                '</div>' +
-                '<span class="sendScore" id="' + result.name + '"><button type="button" class="btn btn-primary">Vote</button></span>';
+            
+            if (result.score.id > -1) {
+                footer += '<div class="input-group input-group-sm mb-3" id="voteArea">' +
+                    '<select class="custom-select my-1 mr-sm-2" id="chosenScore">' +
+                    '<option value="5">5</option>' +
+                    '<option value="4">4</option>' +
+                    '<option value="3">3</option>' +
+                    '<option value="2">2</option>' +
+                    '<option value="1">1</option>' +
+                    '</select>' +
+                    '</div>' +
+                    '<span class="sendScore" id="' + result.name + '"><button id="sendscorebutton" type="button" class="btn btn-primary">Vote</button></span>';
+            }
+            
             if (resultRole == "Admin") {
                footer += '<div class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></div>' +
                     '<span class="delete" id="' + result.name + '"><button type="button" class="btn btn-danger">Delete</button></span>';
@@ -395,6 +399,10 @@ function showModal(result) {
             $(".sendScore").click(function () {
                 let chosenGame = this.id;
                 let chosenScore = $("#chosenScore").val();
+                $("#voteArea").html("");
+                $("#sendscorebutton").prop("disabled", true);
+                $("#sendscorebutton").hide();
+
 
                 $.ajax({
                     url: '/api/games/addscore',
