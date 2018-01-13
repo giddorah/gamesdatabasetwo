@@ -1,17 +1,17 @@
 ﻿$(function () {
-    console.log("HejKorv");
+    
     generateContent();
 
     
    });
 function generateContent() {
-    $("#content").empty();
+    $("#userContent").empty();
     $.ajax({
         url: '/users/returnrole',
         method: 'GET'
     }).done(function (result) {
         if (result == "Anonymous") {
-            $("#content").html('<input type="text" id="logInEmail" />' +
+            $("#userContent").html('<input type="text" id="logInEmail" />' +
                 '<button id="logIn">Log in</button><br />' +
                 '<input id="userEmail" type="text" />' +
                 '<button id="createUser">Register</button> <br />');
@@ -19,13 +19,13 @@ function generateContent() {
         }
 
         if (result == "Publisher" || result == "User") {
-            $("#content").html('<button id="logOut">Log out</button><br />' +
+            $("#userContent").html('<button id="logOut">Log out</button><br />' +
                 ' <input id="emailChange" type="text" />' +
                 '<button id="changeSubmit">Change email</button ><br />');
         }
 
         if (result == "Admin") {
-            $("#content").html('<input id="userEmail" type="text" />' +
+            $("#userContent").html('<input id="userEmail" type="text" />' +
                 '<button id="createUser">Create publisher</button> <br />' +
                 '<button id="getAll">Get all users</button><br />' +
                 '<button id="sortByEmail">Sort by email</button><br />' +
@@ -48,12 +48,12 @@ function generateContent() {
 
         $("#logIn").click(function () {
             logIn();
-            
+
         });
 
         $("#logOut").click(function () {
             logOut();
-            
+
         });
 
         $("#getAll").click(function () {
@@ -65,7 +65,7 @@ function generateContent() {
         });
 
 
-    })
+    });
 }
 function changeSubmit(){
     let email = $("#emailChange").val();
@@ -76,8 +76,8 @@ function changeSubmit(){
         data: { email: email }
     }).done(function (result) {
         console.log(result);
-    })
-};
+    });
+}
 
 function removeUser () {
     let email = $("#removeUserEmail").val();
@@ -88,8 +88,8 @@ function removeUser () {
         data: { email: email }
     }).done(function (result) {
         console.log(result);
-    })
-};
+    });
+}
 
 function createUser () {
     let email = $("#userEmail").val();
@@ -100,8 +100,8 @@ function createUser () {
         data: { email: email }
     }).done(function (result) {
         console.log(result);
-    })
-};
+    });
+}
 
 function logIn () {
     let email = $("#logInEmail").val();
@@ -113,42 +113,42 @@ function logIn () {
     }).done(function (result) {
         console.log(result);
         generateContent();
-    })
-};
+    });
+}
 
 function logOut () {
 
 
     $.ajax({
         url: 'users/signout',
-        method: 'POST',
+        method: 'POST'
 
     }).done(function (result) {
         console.log(result);
         generateContent();
-    })
-};
+    });
+}
 
 function getAll () {
 
 
     $.ajax({
         url: 'users/getall',
-        method: 'GET',
+        method: 'GET'
 
     }).done(function (result) {
         console.log(result);
-    })
-};
+    });
+}
 
 function sortByEmail() {
 
 
     $.ajax({
         url: 'users/sortbyemail',
-        method: 'GET',
+        method: 'GET'
 
     }).done(function (result) {
         console.log(result);
-    })
-};
+    });
+}
