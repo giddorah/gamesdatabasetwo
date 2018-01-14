@@ -100,6 +100,7 @@ $(function () {
             url: '/users/returnrole',
             method: 'GET'
         }).done(function (result) {
+            console.log(result);
             if (result == "Anonymous") {
                 $("#userContent").html('<input type="text" id="logInEmail" />' +
                     '<button id="logIn">Log in</button><br />' +
@@ -113,7 +114,7 @@ $(function () {
                     '<button id="changeSubmit">Change email</button ><br />');
             }
 
-            if (result == "Publisher") {
+            if (result == "Staff") {
                 $("#userContent").html('<button id="logOut">Log out</button><br />' +
                     ' <input id="emailChange" type="text" />' +
                     '<button id="changeSubmit">Change email</button ><br />');
@@ -122,7 +123,7 @@ $(function () {
 
             if (result == "Admin") {
                 $("#userContent").html('<input id="userEmail" type="text" />' +
-                    '<button id="createUser">Create publisher</button> <br />' +
+                    '<button id="createUser">Create staff</button> <br />' +
                     '<button id="getAll">Get all users</button><br />' +
                     '<button id="sortByEmail">Sort by email</button><br />' +
                     '<input type="text" id="removeUserEmail" />' +
@@ -353,7 +354,7 @@ function showModal(result) {
         url: '/users/returnrole',
         method: 'GET'
     }).done(function (resultRole) {
-        if (resultRole == "Admin" || resultRole == "User" || resultRole == "Publisher") {
+        if (resultRole == "Admin" || resultRole == "User" || resultRole == "Staff") {
             
             if (result.score.id > -1) {
                 footer += '<div class="input-group input-group-sm mb-3" id="voteArea">' +
@@ -371,6 +372,9 @@ function showModal(result) {
             if (resultRole == "Admin") {
                footer += '<div class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></div>' +
                     '<span class="delete" id="' + result.name + '"><button type="button" class="btn btn-danger">Delete</button></span>';
+            }
+            if (resultRole == "Staff") {
+                footer += '<div class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></div>';
             }
 
             $(".modal-footer").html(footer);

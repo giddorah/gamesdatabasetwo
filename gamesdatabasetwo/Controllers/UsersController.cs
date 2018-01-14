@@ -140,7 +140,7 @@ namespace gamesdatabasetwo.Controllers
             {
                 var addr = new System.Net.Mail.MailAddress(email);
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
-                await roleManager.CreateAsync(new IdentityRole("Publisher"));
+                await roleManager.CreateAsync(new IdentityRole("Staff"));
                 await roleManager.CreateAsync(new IdentityRole("User"));
                 var user = new ApplicationUser
                 {
@@ -157,8 +157,8 @@ namespace gamesdatabasetwo.Controllers
                         var userResult = await userManager.CreateAsync(user);
                         if (!userResult.Succeeded) return BadRequest("Email is not valid");
 
-                        var publisherResult = await userManager.AddToRoleAsync(user, "Publisher");
-                        if (!publisherResult.Succeeded) return BadRequest("Role does not exist");
+                        var staffResult = await userManager.AddToRoleAsync(user, "Staff");
+                        if (!staffResult.Succeeded) return BadRequest("Role does not exist");
 
                         return Ok($"User {email} added");
                     }
