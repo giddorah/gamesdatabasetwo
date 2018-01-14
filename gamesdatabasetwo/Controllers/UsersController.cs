@@ -122,6 +122,7 @@ namespace gamesdatabasetwo.Controllers
         public async Task<IActionResult> Remove(string email)
         {
             var userToRemove = await userManager.FindByEmailAsync(email);
+            
             applicationDbContext.RemoveUser(userToRemove);
             return Ok($"User with email {email} has been removed");
 
@@ -151,17 +152,6 @@ namespace gamesdatabasetwo.Controllers
                 {
                     string userId = userManager.GetUserId(HttpContext.User);
                     var loggedInUser = await userManager.FindByIdAsync(userId);
-                    if (await userManager.IsInRoleAsync(loggedInUser, "Publisher"))
-                    {
-                        var result = await userManager.CreateAsync(user);
-                        if (!result.Succeeded) return BadRequest("Email is not valid");
-
-                        var roleResult = await userManager.AddToRoleAsync(user, "User");
-                        if (!roleResult.Succeeded) return BadRequest("Role does not exist");
-
-                        return Ok($"User {email} added");
-                    }
-
                     if (await userManager.IsInRoleAsync(loggedInUser, "Admin"))
                     {
                         var userResult = await userManager.CreateAsync(user);
@@ -175,8 +165,8 @@ namespace gamesdatabasetwo.Controllers
                 }
 
 
-                var normalUserresult = await userManager.CreateAsync(user);
-                if (!normalUserresult.Succeeded) return BadRequest("Email is not valid");
+                var normalUserResult = await userManager.CreateAsync(user);
+                if (!normalUserResult.Succeeded) return BadRequest("Email is not valid");
 
                 var normalRoleResult = await userManager.AddToRoleAsync(user, "User");
                 if (!normalRoleResult.Succeeded) return BadRequest("Role does not exist");
