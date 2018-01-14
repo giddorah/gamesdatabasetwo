@@ -120,7 +120,7 @@ namespace gamesdatabasetwo.Controllers
             return Ok("Databases cleared");
         }
 
-        [Authorize(Roles = "Admin, Publisher")]
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPost]
         [Route("addpublisher")]
         public IActionResult AddPublisher(PublisherCreateModel publisherToAdd)
@@ -148,7 +148,7 @@ namespace gamesdatabasetwo.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin, Publisher")]
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPost]
         [Route("adddeveloper")]
         public IActionResult AddDeveloper(DeveloperCreateModel developerToAdd)
@@ -177,7 +177,7 @@ namespace gamesdatabasetwo.Controllers
         }
 
 
-        [Authorize(Roles = "Admin, Publisher")]
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPost]
         [Route("addgame")]
         public IActionResult AddGame(CreateGameModel gameToAdd)
@@ -247,7 +247,7 @@ namespace gamesdatabasetwo.Controllers
             //return Ok(context.GameByNameConvertedToEditModel(name));
         }
 
-        [Authorize(Roles = "Admin, Publisher")]
+        [Authorize(Roles = "Admin, Staff")]
         [HttpPost]
         [Route("editgame")]
         public IActionResult EditGame(string nameOfGameToEdit, CreateGameModel gameToEdit)

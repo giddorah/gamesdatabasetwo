@@ -122,6 +122,7 @@ namespace gamesdatabasetwo.Controllers
         public async Task<IActionResult> Remove(string email)
         {
             var userToRemove = await userManager.FindByEmailAsync(email);
+            
             applicationDbContext.RemoveUser(userToRemove);
             return Ok($"User with email {email} has been removed");
 
@@ -139,7 +140,7 @@ namespace gamesdatabasetwo.Controllers
             {
                 var addr = new System.Net.Mail.MailAddress(email);
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
-                await roleManager.CreateAsync(new IdentityRole("Publisher"));
+                await roleManager.CreateAsync(new IdentityRole("Staff"));
                 await roleManager.CreateAsync(new IdentityRole("User"));
                 var user = new ApplicationUser
                 {
@@ -151,32 +152,21 @@ namespace gamesdatabasetwo.Controllers
                 {
                     string userId = userManager.GetUserId(HttpContext.User);
                     var loggedInUser = await userManager.FindByIdAsync(userId);
-                    if (await userManager.IsInRoleAsync(loggedInUser, "Publisher"))
-                    {
-                        var result = await userManager.CreateAsync(user);
-                        if (!result.Succeeded) return BadRequest("Email is not valid");
-
-                        var roleResult = await userManager.AddToRoleAsync(user, "User");
-                        if (!roleResult.Succeeded) return BadRequest("Role does not exist");
-
-                        return Ok($"User {email} added");
-                    }
-
                     if (await userManager.IsInRoleAsync(loggedInUser, "Admin"))
                     {
                         var userResult = await userManager.CreateAsync(user);
                         if (!userResult.Succeeded) return BadRequest("Email is not valid");
 
-                        var publisherResult = await userManager.AddToRoleAsync(user, "Publisher");
-                        if (!publisherResult.Succeeded) return BadRequest("Role does not exist");
+                        var staffResult = await userManager.AddToRoleAsync(user, "Staff");
+                        if (!staffResult.Succeeded) return BadRequest("Role does not exist");
 
                         return Ok($"User {email} added");
                     }
                 }
 
 
-                var normalUserresult = await userManager.CreateAsync(user);
-                if (!normalUserresult.Succeeded) return BadRequest("Email is not valid");
+                var normalUserResult = await userManager.CreateAsync(user);
+                if (!normalUserResult.Succeeded) return BadRequest("Email is not valid");
 
                 var normalRoleResult = await userManager.AddToRoleAsync(user, "User");
                 if (!normalRoleResult.Succeeded) return BadRequest("Role does not exist");
