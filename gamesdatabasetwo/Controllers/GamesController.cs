@@ -260,7 +260,7 @@ namespace gamesdatabasetwo.Controllers
             else if (ModelState.IsValid)
             {
                 context.EditGame(nameOfGameToEdit, gameToEdit);
-                return Ok($"Id {nameOfGameToEdit} and {gameToEdit.Developer}");
+                return Ok($"{nameOfGameToEdit} has been edited.");
             }
             else
             {
