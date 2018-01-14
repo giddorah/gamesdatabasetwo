@@ -53,7 +53,7 @@ namespace gamesdatabasetwo
             DefaultFilesOptions DefaultFile = new DefaultFilesOptions();
             DefaultFile.DefaultFileNames.Clear();
             DefaultFile.DefaultFileNames.Add("index.html");
-
+            app.UseDefaultFiles(DefaultFile);
             app.UseAuthentication();
             app.UseStaticFiles();
             app.UseMvc();
