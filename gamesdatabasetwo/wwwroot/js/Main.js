@@ -470,53 +470,36 @@ function showModal(result) {
 
 
 function showEditModal(result) {
+
+    let fromDivToSpan = '</div><div class="input-group input-group-sm mb-3"><div class="input-group-prepend"><span class="input-group-text" id="inputGroup-sizing-sm">';
+
+    let spanDiv = '</span></div>';
+
+    let formControlBeginningWithoutSpanDiv = '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="';
+    let formControlBeginning = spanDiv + formControlBeginningWithoutSpanDiv; 
+
     let message = '<div class="input-group input-group-sm mb-3">'
         + '<div class="input-group-prepend" id="' + result.unEditedName + '">'
         + '<span class="input-group-text" id="inputGroup-sizing-sm">'
         + 'Name:'
         + '</span>'
         + '</div>'
-        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="editGameName" value="' + result.name + '"/>'
-        + '</div>'
-        + '<div class="input-group input-group-sm mb-3">'
-        + '<div class="input-group-prepend">'
-        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + formControlBeginningWithoutSpanDiv + 'editGameName" value="' + result.name + '"/>'
+        + fromDivToSpan
         + 'Year:'
-        + '</span>'
-        + '</div>'
-        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="editGameYear" value="' + result.year + '"/>'
-        + '</div>'
-        + '<div class="input-group input-group-sm mb-3">'
-        + '<div class="input-group-prepend">'
-        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + formControlBeginning + 'editGameYear" value="' + result.year + '"/>'
+        + fromDivToSpan
         + 'Platforms:'
-        + '</span>'
-        + '</div>'
-        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="editGamePlatforms" value="' + result.platforms + '"/>'
-        + '</div>'
-        + '<div class="input-group input-group-sm mb-3">'
-        + '<div class="input-group-prepend">'
-        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + formControlBeginning + 'editGamePlatforms" value="' + result.platforms + '"/>'
+        + fromDivToSpan
         + 'Theme:'
-        + '</span>'
-        + '</div>'
-        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="editGameTheme" value="' + result.theme + '" />'
-        + '</div>'
-        + '<div class="input-group input-group-sm mb-3">'
-        + '<div class="input-group-prepend">'
-        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + formControlBeginning + 'editGameTheme" value="' + result.theme + '" />'
+        + fromDivToSpan
         + 'Genre:'
-        + '</span>'
-        + '</div>'
-        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="editGameGenre" value="' + result.genre + '" />'
-        + '</div>'
-        + '<div class="input-group input-group-sm mb-3">'
-        + '<div class="input-group-prepend">'
-        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + formControlBeginning + 'editGameGenre" value="' + result.genre + '" />'
+        + fromDivToSpan
         + 'Released where:'
-        + '</span>'
-        + '</div>'
-        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="editGameReleasedWhere" value="' + result.releasedWhere + '"/>'
+        + formControlBeginning + 'editGameReleasedWhere" value="' + result.releasedWhere + '"/>'
         + '</div>'
         + '<div class="input-group input-group-sm mb-3">'
         + '<select class="custom-select my-1 mr-sm-2" id="publisherEditSelectForm"></select>'
