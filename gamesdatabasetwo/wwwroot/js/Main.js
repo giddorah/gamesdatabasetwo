@@ -46,7 +46,7 @@ function ShowStatus(contents, statusType) {
 
 function removeUser(email) {
 
-    console.log(email);
+   
     $.ajax({
         url: '/users/remove',
         method: 'POST',
@@ -62,7 +62,7 @@ function removeUser(email) {
 
 function createUser() {
     let email = $("#userEmail").val();
-    console.log(email);
+    
     $.ajax({
         url: '/users/add',
         method: 'POST',
@@ -106,17 +106,7 @@ function logOut() {
         generateContent();
     });
 }
-//function sortByEmail() {
 
-
-//    $.ajax({
-//        url: 'users/sortbyemail',
-//        method: 'GET'
-
-//    }).done(function (result) {
-//        console.log(result);
-//    });
-//}
 function getAllUsers(url) {
 
 
@@ -154,7 +144,7 @@ function getAllUsers(url) {
             removeUser(this.id);
         });
         $("#sortByEmail").click(function () {
-            console.log("hej");
+           
             getAllUsers("sortbyemail");
         });
 
@@ -171,36 +161,36 @@ function generateContent() {
         url: '/users/returnrole',
         method: 'GET'
     }).done(function (result) {
-        console.log(result);
+       
         if (result == "Anonymous") {
             $("#userContent").html('<input type="text" id="logInEmail" />' +
-                '<button class ="btn-primary" id="logIn">Log in</button><br />' +
+                '<button class ="btn-sm  btn-primary" id="logIn">Log in</button><br />' +
                 '<input id="userEmail" type="text" />' +
-                '<button class="btn-success" id="createUser">Register</button> <br />');
+                '<button class="btn-sm  btn-success" id="createUser">Register</button> <br />');
 
         }
         if (result == "User") {
             $("#userContent").html('<input id="emailChange" type="text" />'+
-                '<button class="btn-warning" id="changeSubmit">Change email</button ><br />' +
-                '<button class="btn-danger" id="logOut">Log out</button> <br />');
+                '<button class="btn btn-warning" id="changeSubmit">Change email</button ><br />' +
+                '<button class="btn btn-danger" id="logOut">Log out</button> <br />');
         }
 
         if (result == "Staff") {
             $("#userContent").html(' <input id="emailChange" type="text" />'+
-                '<button class="btn-warning" id="changeSubmit">Change email</button ><br />' +
-                '<button class="btn-danger" id="logOut">Log out</button><br />');
+                '<button class="btn-sm  btn-warning" id="changeSubmit">Change email</button ><br />' +
+                '<button class="btn-sm  btn-danger" id="logOut">Log out</button><br />');
             generateCreateArea();
         }
 
         if (result == "Admin") {
             $("#userContent").html('<input id="userEmail" type="text" />' +
-                '<button class ="btn-success" id="createUser">Create staff</button> <br />' +
-                '<button class="btn-primary" id="getAll">Get all users</button><br />' +
-                '<button class="btn-danger" id="logOut">Log out</button><br />');
+                '<button class ="btn-sm  btn-success" id="createUser">Create staff</button> <br />' +
+                '<button class="btn-sm  btn-primary" id="getAll">Get all users</button><br />' +
+                '<button class="btn-sm  btn-danger" id="logOut">Log out</button><br />');
             $("#adminButtons").html('<input type="text" id="gameId" /> <br />' +
-                '<button class="btn-primary" id="getSpecificGame">GetGame</button> <br />' +
-                '<button class="btn-primary" id="refillDatabase">Refill the database</button>' +
-                '<button class="btn-danger" id="emptyDatabases">Empty databases</button> <br />');
+                '<button class="btn-sm  btn-primary" id="getSpecificGame">GetGame</button> <br />' +
+                '<button class="btn-sm  btn-primary" id="refillDatabase">Refill the database</button>' +
+                '<button class="btn-sm  btn-danger" id="emptyDatabases">Empty databases</button> <br />');
             generateCreateArea();
 
             $("#getSpecificGame").click(function () {
@@ -346,7 +336,7 @@ function getAllGames(url) {
             numberInList++;
         });
         message += '</tbody></table>';
-        console.log(message);
+        
         $("#showResults").html(message);
         $("#sortByName").click(function () {
             getAllGames("sortedByName");
@@ -375,7 +365,7 @@ $("#getAllGames").click(function () {
 
 function showModal(result) {
     let footer = "";
-    console.log(result.score.id);
+    
     let message = '<table class="table table-striped table-dark">' +
         '<thead>' +
         '<tr>' +
@@ -709,7 +699,7 @@ function generateCreateArea() {
 }
 
 function createGame() {
-    console.log("test");
+   
     let name = $("#gameName").val();
     let year = $("#gameYear").val();
     let platforms = $("#gamePlatforms").val();
