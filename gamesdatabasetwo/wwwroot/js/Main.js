@@ -7,265 +7,250 @@ $(function () {
 
     $("#publisherDropdown").html();
 });
-    function changeSubmit() {
-        let email = $("#emailChange").val();
+function changeSubmit() {
+    let email = $("#emailChange").val();
 
-        $.ajax({
-            url: 'users/edit',
-            method: 'POST',
-            data: { email: email }
-        }).done(function (result) {
-            $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                + result
-                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                + '<span aria-hidden="true">&times;</span>'
-                + '</button >'
-                + '</div >');
-            }).fail(function (xhr, status, error) {
-                $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
-                    + xhr.responseText
-                    + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                    + '<span aria-hidden="true">&times;</span>'
-                    + '</button >'
-                    + '</div >');
-            });
+    $.ajax({
+        url: 'users/edit',
+        method: 'POST',
+        data: { email: email }
+    }).done(function (result) {
+        
+        ShowStatus(result, 0);
+    }).fail(function (xhr, status, error) {
+        ShowStatus(xhr.responseText, 1);
+        
+    });
+}
+
+function ShowStatus(contents, statusType) {
+    var alertStyle = "";
+    var formattedStatus = "";
+
+    if (statusType === 0) {
+        alertStyle = '"alert alert-success alert-dismissible fade show"';
+    }
+    else if (statusType === 1) {
+        alertStyle = '"alert alert-danger alert-dismissible fade show"';
     }
 
-    function removeUser() {
-        let email = $("#removeUserEmail").val();
-        console.log(email);
-        $.ajax({
-            url: '/users/remove',
-            method: 'POST',
-            data: { email: email }
-        }).done(function (result) {
-            $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                + result
-                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                + '<span aria-hidden="true">&times;</span>'
-                + '</button >'
-                + '</div >');
-            }).fail(function (xhr, status, error) {
-                $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
-                    + xhr.responseText
-                    + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                    + '<span aria-hidden="true">&times;</span>'
-                    + '</button >'
-                    + '</div >');
-            });
-    }
+    formattedStatus = '<div class=' + alertStyle + ' role="alert">'
+        + contents
+        + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+        + '<span aria-hidden="true">&times;</span>'
+        + '</button >'
+        + '</div >';
 
-    function createUser() {
-        let email = $("#userEmail").val();
-        console.log(email);
-        $.ajax({
-            url: '/users/add',
-            method: 'POST',
-            data: { email: email }
-        }).done(function (result) {
-            $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                + result
-                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                + '<span aria-hidden="true">&times;</span>'
-                + '</button >'
-                + '</div >');
-            }).fail(function (xhr, status, error) {
-                $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
-                    + xhr.responseText
-                    + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                    + '<span aria-hidden="true">&times;</span>'
-                    + '</button >'
-                    + '</div >');
+    $("#results").html(formattedStatus);
+}
+
+function removeUser() {
+    let email = $("#removeUserEmail").val();
+    console.log(email);
+    $.ajax({
+        url: '/users/remove',
+        method: 'POST',
+        data: { email: email }
+    }).done(function (result) {
+        ShowStatus(result, 0);
+        
+    }).fail(function (xhr, status, error) {
+        ShowStatus(xhr.responseText, 1);
+        
+    });
+}
+
+function createUser() {
+    let email = $("#userEmail").val();
+    console.log(email);
+    $.ajax({
+        url: '/users/add',
+        method: 'POST',
+        data: { email: email }
+    }).done(function (result) {
+        ShowStatus(result, 0);
+        
+    }).fail(function (xhr, status, error) {
+        ShowStatus(xhr.responseText, 1);
+        
+    });
+}
+
+function logIn() {
+    let email = $("#logInEmail").val();
+
+    $.ajax({
+        url: 'users/signin',
+        method: 'POST',
+        data: { email: email }
+    }).done(function (result) {
+        ShowStatus(result, 0);
+        
+        generateContent();
+        }).fail(function (xhr, status, error) {
+            ShowStatus(xhr.responseText, 1);
+        
+    });
+}
+
+function logOut() {
+
+
+    $.ajax({
+        url: 'users/signout',
+        method: 'POST'
+
+    }).done(function (result) {
+        ShowStatus(result, 0);
+        
+        generateContent();
+    });
+}
+
+function getAllUsers() {
+
+
+    $.ajax({
+        url: 'users/getall',
+        method: 'GET'
+
+    }).done(function (result) {
+        console.log(result);
+    });
+}
+
+function sortByEmail() {
+
+
+    $.ajax({
+        url: 'users/sortbyemail',
+        method: 'GET'
+
+    }).done(function (result) {
+        console.log(result);
+    });
+}
+function generateContent() {
+    $("#userContent").empty();
+    $("#adminButtons").empty();
+    $("#createArea").empty();
+    $.ajax({
+        url: '/users/returnrole',
+        method: 'GET'
+    }).done(function (result) {
+        console.log(result);
+        if (result == "Anonymous") {
+            $("#userContent").html('<input type="text" id="logInEmail" />' +
+                '<button id="logIn">Log in</button><br />' +
+                '<input id="userEmail" type="text" />' +
+                '<button id="createUser">Register</button> <br />');
+
+        }
+        if (result == "User") {
+            $("#userContent").html('<button id="logOut">Log out</button><br />' +
+                ' <input id="emailChange" type="text" />' +
+                '<button id="changeSubmit">Change email</button ><br />');
+        }
+
+        if (result == "Staff") {
+            $("#userContent").html('<button id="logOut">Log out</button><br />' +
+                ' <input id="emailChange" type="text" />' +
+                '<button id="changeSubmit">Change email</button ><br />');
+            generateCreateArea();
+        }
+
+        if (result == "Admin") {
+            $("#userContent").html('<input id="userEmail" type="text" />' +
+                '<button id="createUser">Create staff</button> <br />' +
+                '<button id="getAll">Get all users</button><br />' +
+                '<button id="sortByEmail">Sort by email</button><br />' +
+                '<input type="text" id="removeUserEmail" />' +
+                '<button id="removeUser">Remove user</button ><br />' +
+                '<button id="logOut">Log out</button><br />');
+            $("#adminButtons").html('<input type="text" id="gameId" /> <br />' +
+                '<button class="btn btn-primary" id="getSpecificGame">GetGame</button> <br />' +
+                '<button class="btn btn-primary" id="refillDatabase">Refill the database</button>' +
+                '<button class="btn btn-danger" id="emptyDatabases">Empty databases</button> <br />');
+            generateCreateArea();
+
+            $("#getSpecificGame").click(function () {
+                getSpecificGame();
+            });
+
+            $("#refillDatabase").click(function () {
+                refillDatabase();
+            });
+
+            $("#emptyDatabases").click(function () {
+                emptyDatabase();
+            });
+        }
+
+        $("#changeSubmit").click(function () {
+            changeSubmit();
         });
-    }
 
-    function logIn() {
-        let email = $("#logInEmail").val();
-
-        $.ajax({
-            url: 'users/signin',
-            method: 'POST',
-            data: { email: email }
-        }).done(function (result) {
-            $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                + result
-                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                + '<span aria-hidden="true">&times;</span>'
-                + '</button >'
-                + '</div >');
-            generateContent();
-            }).fail(function (xhr, status, error) {
-                $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
-                    + xhr.responseText
-                    + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                    + '<span aria-hidden="true">&times;</span>'
-                    + '</button >'
-                    + '</div >');
-            });
-    }
-
-    function logOut() {
-
-
-        $.ajax({
-            url: 'users/signout',
-            method: 'POST'
-
-        }).done(function (result) {
-            $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                + result
-                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                + '<span aria-hidden="true">&times;</span>'
-                + '</button >'
-                + '</div >');
-            generateContent();
+        $("#removeUser").click(function () {
+            removeUser();
         });
-    }
 
-    function getAllUsers() {
-
-
-        $.ajax({
-            url: 'users/getall',
-            method: 'GET'
-
-        }).done(function (result) {
-            console.log(result);
+        $("#createUser").click(function () {
+            createUser();
         });
-    }
 
-    function sortByEmail() {
-
-
-        $.ajax({
-            url: 'users/sortbyemail',
-            method: 'GET'
-
-        }).done(function (result) {
-            console.log(result);
-        });
-    }
-    function generateContent() {
-        $("#userContent").empty();
-        $("#adminButtons").empty();
-        $("#createArea").empty();
-        $.ajax({
-            url: '/users/returnrole',
-            method: 'GET'
-        }).done(function (result) {
-            console.log(result);
-            if (result == "Anonymous") {
-                $("#userContent").html('<input type="text" id="logInEmail" />' +
-                    '<button id="logIn">Log in</button><br />' +
-                    '<input id="userEmail" type="text" />' +
-                    '<button id="createUser">Register</button> <br />');
-
-            }
-            if (result == "User") {
-                $("#userContent").html('<button id="logOut">Log out</button><br />' +
-                    ' <input id="emailChange" type="text" />' +
-                    '<button id="changeSubmit">Change email</button ><br />');
-            }
-
-            if (result == "Staff") {
-                $("#userContent").html('<button id="logOut">Log out</button><br />' +
-                    ' <input id="emailChange" type="text" />' +
-                    '<button id="changeSubmit">Change email</button ><br />');
-                generateCreateArea();
-            }
-
-            if (result == "Admin") {
-                $("#userContent").html('<input id="userEmail" type="text" />' +
-                    '<button id="createUser">Create staff</button> <br />' +
-                    '<button id="getAll">Get all users</button><br />' +
-                    '<button id="sortByEmail">Sort by email</button><br />' +
-                    '<input type="text" id="removeUserEmail" />' +
-                    '<button id="removeUser">Remove user</button ><br />' +
-                    '<button id="logOut">Log out</button><br />');
-                $("#adminButtons").html('<input type="text" id="gameId" /> <br />' +
-                    '<button class="btn btn-primary" id="getSpecificGame">GetGame</button> <br />' +
-                    '<button class="btn btn-primary" id="refillDatabase">Refill the database</button>' +
-                    '<button class="btn btn-danger" id="emptyDatabases">Empty databases</button> <br />');
-                generateCreateArea();
-
-                $("#getSpecificGame").click(function () {
-                    getSpecificGame();
-                });
-
-                $("#refillDatabase").click(function () {
-                    refillDatabase();
-                });
-
-                $("#emptyDatabases").click(function () {
-                    emptyDatabase();
-                });
-            }
-
-            $("#changeSubmit").click(function () {
-                changeSubmit();
-            });
-
-            $("#removeUser").click(function () {
-                removeUser();
-            });
-
-            $("#createUser").click(function () {
-                createUser();
-            });
-
-            $("#logIn").click(function () {
-                logIn();
-
-            });
-
-            $("#logOut").click(function () {
-                logOut();
-
-            });
-
-            $("#getAll").click(function () {
-                getAllUsers();
-            });
-
-            $("#sortByEmail").click(function () {
-                sortByEmail();
-            });
-
+        $("#logIn").click(function () {
+            logIn();
 
         });
-    }
 
-    function getAllDevelopers() {
-        $.ajax({
-            url: '/api/games/getdevelopers',
-            method: 'GET'
-        }).done(function (result) {
-            let developerData = "<option selected>Choose Developer...</option>";
+        $("#logOut").click(function () {
+            logOut();
 
-            let number = 1;
-            $.each(result, function (index, item) {
-                developerData += '<option value="' + item.name + '">' + item.name + '</option>';
-                number++;
-            });
-            $("#developerSelectForm").html(developerData);
         });
-    }
 
-    function getAllPublishers() {
-        $.ajax({
-            url: '/api/games/getpublishers',
-            method: 'GET'
-        }).done(function (result) {
-            let publisherData = "<option selected>Choose Publisher...</option>";
-
-            let number = 1;
-            $.each(result, function (index, item) {
-                publisherData += '<option value="' + item.name + '">' + item.name + '</option>';
-                number++;
-            });
-            $("#publisherSelectForm").html(publisherData);
+        $("#getAll").click(function () {
+            getAllUsers();
         });
-    }
+
+        $("#sortByEmail").click(function () {
+            sortByEmail();
+        });
+
+
+    });
+}
+
+function getAllDevelopers() {
+    $.ajax({
+        url: '/api/games/getdevelopers',
+        method: 'GET'
+    }).done(function (result) {
+        let developerData = "<option selected>Choose Developer...</option>";
+
+        let number = 1;
+        $.each(result, function (index, item) {
+            developerData += '<option value="' + item.name + '">' + item.name + '</option>';
+            number++;
+        });
+        $("#developerSelectForm").html(developerData);
+    });
+}
+
+function getAllPublishers() {
+    $.ajax({
+        url: '/api/games/getpublishers',
+        method: 'GET'
+    }).done(function (result) {
+        let publisherData = "<option selected>Choose Publisher...</option>";
+
+        let number = 1;
+        $.each(result, function (index, item) {
+            publisherData += '<option value="' + item.name + '">' + item.name + '</option>';
+            number++;
+        });
+        $("#publisherSelectForm").html(publisherData);
+    });
+}
 
 
 function getSpecificGame() {
@@ -408,7 +393,7 @@ function showModal(result) {
         method: 'GET'
     }).done(function (resultRole) {
         if (resultRole == "Admin" || resultRole == "User" || resultRole == "Staff") {
-            
+
             if (result.score.id > -1) {
                 footer += '<div class="input-group input-group-sm mb-3" id="voteArea">' +
                     '<select class="custom-select my-1 mr-sm-2" id="chosenScore">' +
@@ -421,9 +406,9 @@ function showModal(result) {
                     '</div>' +
                     '<span class="sendScore" id="' + result.name + '"><button id="sendscorebutton" type="button" class="btn btn-primary">Vote</button></span>';
             }
-            
+
             if (resultRole == "Admin") {
-               footer += '<div class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></div>' +
+                footer += '<div class="edit" id="' + result.name + '"><button type="button" class="btn btn-warning">Edit</button></div>' +
                     '<span class="delete" id="' + result.name + '"><button type="button" class="btn btn-danger">Delete</button></span>';
             }
             if (resultRole == "Staff") {
@@ -449,13 +434,8 @@ function showModal(result) {
                     method: 'POST',
                     data: { name: this.id }
                 }).done(function (result) {
-                    alert(result);
-                    $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
-                        + 'Game has been deleted.'
-                        + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                        + '<span aria-hidden="true">&times;</span>'
-                        + '</button >'
-                        + '</div >');
+                    ShowStatus(result, 1);
+                    
                 });
             });
 
@@ -477,7 +457,7 @@ function showModal(result) {
                 });
             });
         }
-        
+
         $(".modal-footer").append('<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>');
     });
 
@@ -605,13 +585,8 @@ function showEditModal(result) {
             method: 'POST',
             data: { nameOfGameToEdit: result.unEditedName, name: name, year: year, platforms: platforms, theme: theme, genre: genre, releasedWhere: releasedWhere, publisher: publisher, developer: developer }
         }).done(function (result) {
-
-            $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                + 'Game has been edited.'
-                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                + '<span aria-hidden="true">&times;</span>'
-                + '</button >'
-                + '</div >');
+            ShowStatus(result, 0);
+            
 
         }).fail(function (xhr, status, error) {
 
@@ -621,13 +596,8 @@ function showEditModal(result) {
 
                 concatinatedErrorMessages += item[0] + " ";
             });
-
-            $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
-                + concatinatedErrorMessages
-                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-                + '<span aria-hidden="true">&times;</span>'
-                + '</button >'
-                + '</div >');
+            ShowStatus(concatinatedErrorMessages, 1);
+            
         });
     });
 }
@@ -747,13 +717,8 @@ function createGame() {
         method: 'POST',
         data: { name: name, year: year, platforms: platforms, theme: theme, genre: genre, releasedWhere: releasedWhere, publisher: publisher, developer: developer }
     }).done(function (result) {
-
-        $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
-            + 'Game has been added.'
-            + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-            + '<span aria-hidden="true">&times;</span>'
-            + '</button >'
-            + '</div >');
+        ShowStatus(result, 0);
+        
 
     }).fail(function (xhr, status, error) {
 
@@ -763,12 +728,7 @@ function createGame() {
 
             concatinatedErrorMessages += item[0] + " ";
         });
+        ShowStatus(concatinatedErrorMessages, 1);
 
-        $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
-            + concatinatedErrorMessages
-            + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
-            + '<span aria-hidden="true">&times;</span>'
-            + '</button >'
-            + '</div >');
     });
 }
