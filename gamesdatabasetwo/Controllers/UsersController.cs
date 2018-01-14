@@ -73,12 +73,16 @@ namespace gamesdatabasetwo.Controllers
         }
 
         [HttpGet, Route("sortbyemail")]
-        public IActionResult SortByEmail()
+        public async Task<IActionResult> SortByEmail()
         {
             var sortManager = new SortManager(applicationDbContext);
             var users = applicationDbContext.AllUsers();
             var sortedList = sortManager.AlphabeticallySortedUsers(users);
-
+            foreach (var item in sortedList)
+            {
+                var user = await userManager.FindByEmailAsync(item.Email);
+                item.Role = await userManager.GetRolesAsync(user);
+            }
 
             return Ok(sortedList);
         }

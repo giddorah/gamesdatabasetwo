@@ -174,29 +174,29 @@ function generateContent() {
         console.log(result);
         if (result == "Anonymous") {
             $("#userContent").html('<input type="text" id="logInEmail" />' +
-                '<button id="logIn">Log in</button><br />' +
+                '<button class ="btn btn-primary" id="logIn">Log in</button><br />' +
                 '<input id="userEmail" type="text" />' +
-                '<button id="createUser">Register</button> <br />');
+                '<button class="btn btn-success" id="createUser">Register</button> <br />');
 
         }
         if (result == "User") {
-            $("#userContent").html('<button id="logOut">Log out</button><br />' +
+            $("#userContent").html('<button class="btn btn-danger" id="logOut">Log out</button><br />' +
                 ' <input id="emailChange" type="text" />' +
-                '<button id="changeSubmit">Change email</button ><br />');
+                '<button class="btn btn-warning" id="changeSubmit">Change email</button ><br />');
         }
 
         if (result == "Staff") {
-            $("#userContent").html('<button id="logOut">Log out</button><br />' +
+            $("#userContent").html('<button class="btn btn-danger" id="logOut">Log out</button><br />' +
                 ' <input id="emailChange" type="text" />' +
-                '<button id="changeSubmit">Change email</button ><br />');
+                '<button class="btn btn-warning" id="changeSubmit">Change email</button ><br />');
             generateCreateArea();
         }
 
         if (result == "Admin") {
             $("#userContent").html('<input id="userEmail" type="text" />' +
-                '<button id="createUser">Create staff</button> <br />' +
+                '<button btn btn-primary id="createUser">Create staff</button> <br />' +
                 '<button id="getAll">Get all users</button><br />' +
-                '<button id="logOut">Log out</button><br />');
+                '<button class="btn btn-danger" id="logOut">Log out</button><br />');
             $("#adminButtons").html('<input type="text" id="gameId" /> <br />' +
                 '<button class="btn btn-primary" id="getSpecificGame">GetGame</button> <br />' +
                 '<button class="btn btn-primary" id="refillDatabase">Refill the database</button>' +
