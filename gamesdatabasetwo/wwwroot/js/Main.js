@@ -164,33 +164,33 @@ function generateContent() {
        
         if (result == "Anonymous") {
             $("#userContent").html('<input type="text" id="logInEmail" />' +
-                '<button class ="btn-sm  btn-primary" id="logIn">Log in</button><br />' +
+                '<button class ="btn btn-primary btn-sm" id="logIn">Log in</button><br />' +
                 '<input id="userEmail" type="text" />' +
-                '<button class="btn-sm  btn-success" id="createUser">Register</button> <br />');
+                '<button class="btn btn-success btn-sm" id="createUser">Register</button> <br />');
 
         }
         if (result == "User") {
             $("#userContent").html('<input id="emailChange" type="text" />'+
-                '<button class="btn btn-warning" id="changeSubmit">Change email</button ><br />' +
-                '<button class="btn btn-danger" id="logOut">Log out</button> <br />');
+                '<button class="btn btn-warning btn-sm" id="changeSubmit">Change email</button ><br />' +
+                '<button class="btn btn-danger btn-sm" id="logOut">Log out</button> <br />');
         }
 
         if (result == "Staff") {
             $("#userContent").html(' <input id="emailChange" type="text" />'+
-                '<button class="btn-sm  btn-warning" id="changeSubmit">Change email</button ><br />' +
-                '<button class="btn-sm  btn-danger" id="logOut">Log out</button><br />');
+                '<button class="btn btn-warning btn-sm" id="changeSubmit">Change email</button ><br />' +
+                '<button class="btn btn-danger btn-sm" id="logOut">Log out</button><br />');
             generateCreateArea();
         }
 
         if (result == "Admin") {
             $("#userContent").html('<input id="userEmail" type="text" />' +
-                '<button class ="btn-sm  btn-success" id="createUser">Create staff</button> <br />' +
-                '<button class="btn-sm  btn-primary" id="getAll">Get all users</button><br />' +
-                '<button class="btn-sm  btn-danger" id="logOut">Log out</button><br />');
+                '<button class ="btn btn-success btn-sm" id="createUser">Create staff</button> <br />' +
+                '<button class="btn btn-primary btn-sm" id="getAll">Get all users</button><br />' +
+                '<button class="btn btn-danger btn-sm" id="logOut">Log out</button><br />');
             $("#adminButtons").html('<input type="text" id="gameId" /> <br />' +
-                '<button class="btn-sm  btn-primary" id="getSpecificGame">GetGame</button> <br />' +
-                '<button class="btn-sm  btn-primary" id="refillDatabase">Refill the database</button>' +
-                '<button class="btn-sm  btn-danger" id="emptyDatabases">Empty databases</button> <br />');
+                '<button class="btn btn-primary btn-sm" id="getSpecificGame">GetGame</button> <br />' +
+                '<button class="btn btn-primary btn-sm" id="refillDatabase">Refill the database</button>' +
+                '<button class="btn btn-danger btn-sm" id="emptyDatabases">Empty databases</button> <br />');
             generateCreateArea();
 
             $("#getSpecificGame").click(function () {
