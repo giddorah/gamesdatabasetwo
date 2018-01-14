@@ -107,11 +107,17 @@ $(function () {
                     '<button id="createUser">Register</button> <br />');
 
             }
-
-            if (result == "Publisher" || result == "User") {
+            if (result == "User") {
                 $("#userContent").html('<button id="logOut">Log out</button><br />' +
                     ' <input id="emailChange" type="text" />' +
                     '<button id="changeSubmit">Change email</button ><br />');
+            }
+
+            if (result == "Publisher") {
+                $("#userContent").html('<button id="logOut">Log out</button><br />' +
+                    ' <input id="emailChange" type="text" />' +
+                    '<button id="changeSubmit">Change email</button ><br />');
+                generateCreateArea();
             }
 
             if (result == "Admin") {
