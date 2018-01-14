@@ -44,9 +44,9 @@ function ShowStatus(contents, statusType) {
     $("#results").html(formattedStatus);
 }
 
-function removeUser() {
-    let email = $("#removeUserEmail").val();
-    console.log(email);
+function removeUser(email) {
+
+    console.log(email)
     $.ajax({
         url: '/users/remove',
         method: 'POST',
@@ -106,30 +106,61 @@ function logOut() {
         generateContent();
     });
 }
+//function sortByEmail() {
 
-function getAllUsers() {
 
+//    $.ajax({
+//        url: 'users/sortbyemail',
+//        method: 'GET'
 
+//    }).done(function (result) {
+//        console.log(result);
+//    });
+//}
+function getAllUsers(url) {
+
+    
     $.ajax({
-        url: 'users/getall',
+        url: 'users/'+url,
         method: 'GET'
 
     }).done(function (result) {
-        console.log(result);
+        $("#sortByEmail").click(function () {
+            console.log("hej");
+            getAllUsers("sortbyemail");
+        });
+        let message = '<table class="table table-striped table-dark">' +
+            '<thead>' +
+            '<tr>' +
+            '<th scope="col">#</th>' +
+            '<th scope="col" id="sortByEmail">Email ↓↑</th>' +
+            '<th scope="col">Remove </th>' +
+            '<th scope="col"></th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+        let numberInList = 1;
+        $.each(result, function (index, item) {
+            message += '<tr>';
+            message += '<th scope="row">' + numberInList + '</th>';
+            message += '<td>' + item.email + '</td>';
+            message += '<td> <button id="' + item.email + '" class="btn btn-danger removeUser">X</button ></td > ';
+            message += '</tr>';
+            numberInList++;
+            
+        });
+        message += '</tbody ></table >';
+
+        $("#showResults").html(message);
+        $(".removeUser").click(function () {
+            removeUser(this.id);  
+        });
+        
+      
     });
 }
 
-function sortByEmail() {
 
-
-    $.ajax({
-        url: 'users/sortbyemail',
-        method: 'GET'
-
-    }).done(function (result) {
-        console.log(result);
-    });
-}
 function generateContent() {
     $("#userContent").empty();
     $("#adminButtons").empty();
@@ -163,9 +194,6 @@ function generateContent() {
             $("#userContent").html('<input id="userEmail" type="text" />' +
                 '<button id="createUser">Create staff</button> <br />' +
                 '<button id="getAll">Get all users</button><br />' +
-                '<button id="sortByEmail">Sort by email</button><br />' +
-                '<input type="text" id="removeUserEmail" />' +
-                '<button id="removeUser">Remove user</button ><br />' +
                 '<button id="logOut">Log out</button><br />');
             $("#adminButtons").html('<input type="text" id="gameId" /> <br />' +
                 '<button class="btn btn-primary" id="getSpecificGame">GetGame</button> <br />' +
@@ -190,10 +218,7 @@ function generateContent() {
             changeSubmit();
         });
 
-        $("#removeUser").click(function () {
-            removeUser();
-        });
-
+       
         $("#createUser").click(function () {
             createUser();
         });
@@ -209,12 +234,10 @@ function generateContent() {
         });
 
         $("#getAll").click(function () {
-            getAllUsers();
+            getAllUsers("getall");
         });
 
-        $("#sortByEmail").click(function () {
-            sortByEmail();
-        });
+        
 
 
     });
@@ -296,33 +319,7 @@ function getAllGames(url) {
         method: 'GET',
         data: { toggle: toggle }
     }).done(function (result) {
-        let message = '<table class="table table-striped table-dark">' +
-            '<thead>' +
-            '<tr>' +
-            '<th scope="col">#</th>' +
-            '<th scope="col" id="sortByName">Name ↓↑</th>' +
-            '<th scope="col" id="sortByYear">Year ↓↑</th>' +
-            '<th scope="col">Platforms</th>' +
-            '<th scope="col">Score</th>' +
-            '<th scope="col">Additional info</th>' +
-            '</tr>' +
-            '</thead>' +
-            '<tbody>';
-        let numberInList = 1;
-        $.each(result, function (index, item) {
-            message += '<tr>';
-            message += '<th scope="row">' + numberInList + '</th>';
-            message += '<td>' + item.name + '</td>';
-            message += '<td>' + item.year + '</td>';
-            message += '<td>' + item.platforms + '</td>';
-            message += '<td>' + item.score.score.toFixed(2) + '</td>';
-            message += '<td style="width: 50px"><span class="additional" id="' + item.name + '"data-title="Additional"><button class="btn btn-info">A</button></span></td>';
-            message += '</tr>';
-            numberInList++;
-        });
-        message += '</tbody ></table >';
-
-        $("#showResults").html(message);
+        
         $("#sortByName").click(function () {
             getAllGames("sortedByName");
         });

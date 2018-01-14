@@ -218,5 +218,7 @@ namespace gamesdatabasetwo.Data
             Games.Update(gameAfterEdit);
             SaveChanges();
         }
+
+       
     }
 }
