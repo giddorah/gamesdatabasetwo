@@ -15,8 +15,20 @@ $(function () {
             method: 'POST',
             data: { email: email }
         }).done(function (result) {
-            console.log(result);
-        });
+            $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                + result
+                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button >'
+                + '</div >');
+            }).fail(function (xhr, status, error) {
+                $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
+                    + xhr.responseText
+                    + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                    + '<span aria-hidden="true">&times;</span>'
+                    + '</button >'
+                    + '</div >');
+            });
     }
 
     function removeUser() {
@@ -27,8 +39,20 @@ $(function () {
             method: 'POST',
             data: { email: email }
         }).done(function (result) {
-            console.log(result);
-        });
+            $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                + result
+                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button >'
+                + '</div >');
+            }).fail(function (xhr, status, error) {
+                $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
+                    + xhr.responseText
+                    + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                    + '<span aria-hidden="true">&times;</span>'
+                    + '</button >'
+                    + '</div >');
+            });
     }
 
     function createUser() {
@@ -39,7 +63,19 @@ $(function () {
             method: 'POST',
             data: { email: email }
         }).done(function (result) {
-            console.log(result);
+            $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                + result
+                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button >'
+                + '</div >');
+            }).fail(function (xhr, status, error) {
+                $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
+                    + xhr.responseText
+                    + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                    + '<span aria-hidden="true">&times;</span>'
+                    + '</button >'
+                    + '</div >');
         });
     }
 
@@ -51,9 +87,21 @@ $(function () {
             method: 'POST',
             data: { email: email }
         }).done(function (result) {
-            console.log(result);
+            $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                + result
+                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button >'
+                + '</div >');
             generateContent();
-        });
+            }).fail(function (xhr, status, error) {
+                $("#results").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">'
+                    + xhr.responseText
+                    + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                    + '<span aria-hidden="true">&times;</span>'
+                    + '</button >'
+                    + '</div >');
+            });
     }
 
     function logOut() {
@@ -64,12 +112,17 @@ $(function () {
             method: 'POST'
 
         }).done(function (result) {
-            console.log(result);
+            $("#results").html('<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                + result
+                + '<button type= "button" class="close" data-dismiss="alert" aria-label="Close" >'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button >'
+                + '</div >');
             generateContent();
         });
     }
 
-    function getAll() {
+    function getAllUsers() {
 
 
         $.ajax({
@@ -171,7 +224,7 @@ $(function () {
             });
 
             $("#getAll").click(function () {
-                getAll();
+                getAllUsers();
             });
 
             $("#sortByEmail").click(function () {

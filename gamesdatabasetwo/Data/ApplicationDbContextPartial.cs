@@ -137,12 +137,7 @@ namespace gamesdatabasetwo.Data
             return false;
         }
 
-        public void RemoveUser(ApplicationUser user)
-        {
-           
-            Users.Remove(user);
-            SaveChanges();
-        }
+        
 
         public void AddDeveloper(Developer developer)
         {

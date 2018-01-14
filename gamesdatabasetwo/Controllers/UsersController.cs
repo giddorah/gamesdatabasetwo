@@ -101,7 +101,7 @@ namespace gamesdatabasetwo.Controllers
             catch (Exception)
             {
 
-                return BadRequest($"User with {email} does not exist");
+                return BadRequest($"User with email {email} does not exist");
             }
             
             
@@ -121,10 +121,19 @@ namespace gamesdatabasetwo.Controllers
         [HttpPost, Route("remove")]
         public async Task<IActionResult> Remove(string email)
         {
-            var userToRemove = await userManager.FindByEmailAsync(email);
+            try
+            {
+                var userToRemove = await userManager.FindByEmailAsync(email);
+                var result = await userManager.DeleteAsync(userToRemove);
+                if (!result.Succeeded) return BadRequest($"User with email {email} does not exist");
+                return Ok($"User with email {email} has been removed");
+            }
+            catch (Exception)
+            {
+
+                return BadRequest($"User with email {email} does not exist");
+            }
             
-            applicationDbContext.RemoveUser(userToRemove);
-            return Ok($"User with email {email} has been removed");
 
         }
 
@@ -184,21 +193,35 @@ namespace gamesdatabasetwo.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(string email)
         {
-            string userId = userManager.GetUserId(HttpContext.User);
-            var user = await userManager.FindByIdAsync(userId);
-            var token = await userManager.GenerateChangeEmailTokenAsync(user, email);
-            var result = await userManager.ChangeEmailAsync(user, email, token);
-            if (!result.Succeeded)
+            if (String.IsNullOrEmpty(email))
             {
-                return BadRequest("That is not a valid email");
+                return BadRequest("Emailadress field can not be empty");
             }
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                string userId = userManager.GetUserId(HttpContext.User);
+                var user = await userManager.FindByIdAsync(userId);
+                var token = await userManager.GenerateChangeEmailTokenAsync(user, email);
+                var result = await userManager.ChangeEmailAsync(user, email, token);
+                if (!result.Succeeded)
+                {
+                    return BadRequest("That is not a valid email");
+                }
 
-            var change = await userManager.SetUserNameAsync(user, email);
-            if (!change.Succeeded)
-            {
-                return BadRequest("Not a valid username");
+                var change = await userManager.SetUserNameAsync(user, email);
+                if (!change.Succeeded)
+                {
+                    return BadRequest("Not a valid username");
+                }
+                return Ok($"Updated email to {email}");
             }
-            return Ok($"Updated email to {email}");
+            catch (Exception)
+            {
+
+                return BadRequest($"{email} is not a valid email");
+            }
+            
         }
     }
 }
