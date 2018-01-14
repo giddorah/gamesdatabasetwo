@@ -84,9 +84,17 @@ namespace gamesdatabasetwo.Controllers
         }
 
         [HttpGet, Route("getall")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(applicationDbContext.AllUsers());
+            var listOfUsers = applicationDbContext.AllUsers();
+            foreach (var item in listOfUsers)
+            {
+                var user = await userManager.FindByEmailAsync(item.Email);
+                item.Role = await userManager.GetRolesAsync(user);
+                
+            }
+            
+            return Ok(listOfUsers);
         }
 
         [AllowAnonymous]

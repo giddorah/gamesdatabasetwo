@@ -15,11 +15,11 @@ function changeSubmit() {
         method: 'POST',
         data: { email: email }
     }).done(function (result) {
-        
+
         ShowStatus(result, 0);
     }).fail(function (xhr, status, error) {
         ShowStatus(xhr.responseText, 1);
-        
+
     });
 }
 
@@ -46,17 +46,17 @@ function ShowStatus(contents, statusType) {
 
 function removeUser(email) {
 
-    console.log(email)
+    console.log(email);
     $.ajax({
         url: '/users/remove',
         method: 'POST',
         data: { email: email }
     }).done(function (result) {
         ShowStatus(result, 0);
-        
+
     }).fail(function (xhr, status, error) {
         ShowStatus(xhr.responseText, 1);
-        
+
     });
 }
 
@@ -69,10 +69,10 @@ function createUser() {
         data: { email: email }
     }).done(function (result) {
         ShowStatus(result, 0);
-        
+
     }).fail(function (xhr, status, error) {
         ShowStatus(xhr.responseText, 1);
-        
+
     });
 }
 
@@ -85,11 +85,11 @@ function logIn() {
         data: { email: email }
     }).done(function (result) {
         ShowStatus(result, 0);
-        
+
         generateContent();
-        }).fail(function (xhr, status, error) {
-            ShowStatus(xhr.responseText, 1);
-        
+    }).fail(function (xhr, status, error) {
+        ShowStatus(xhr.responseText, 1);
+
     });
 }
 
@@ -102,7 +102,7 @@ function logOut() {
 
     }).done(function (result) {
         ShowStatus(result, 0);
-        
+
         generateContent();
     });
 }
@@ -119,23 +119,20 @@ function logOut() {
 //}
 function getAllUsers(url) {
 
-    
+
     $.ajax({
-        url: 'users/'+url,
+        url: 'users/' + url,
         method: 'GET'
 
     }).done(function (result) {
-        $("#sortByEmail").click(function () {
-            console.log("hej");
-            getAllUsers("sortbyemail");
-        });
+
         let message = '<table class="table table-striped table-dark">' +
             '<thead>' +
             '<tr>' +
             '<th scope="col">#</th>' +
             '<th scope="col" id="sortByEmail">Email ↓↑</th>' +
-            '<th scope="col">Remove </th>' +
-            '<th scope="col"></th>' +
+            '<th scope="col"> Role </th>' +
+            '<th scope="col">Remove</th>' +
             '</tr>' +
             '</thead>' +
             '<tbody>';
@@ -144,19 +141,24 @@ function getAllUsers(url) {
             message += '<tr>';
             message += '<th scope="row">' + numberInList + '</th>';
             message += '<td>' + item.email + '</td>';
+            message += '<td>' + item.role + '</td>';
             message += '<td> <button id="' + item.email + '" class="btn btn-danger removeUser">X</button ></td > ';
             message += '</tr>';
             numberInList++;
-            
+
         });
         message += '</tbody ></table >';
 
         $("#showResults").html(message);
         $(".removeUser").click(function () {
-            removeUser(this.id);  
+            removeUser(this.id);
         });
-        
-      
+        $("#sortByEmail").click(function () {
+            console.log("hej");
+            getAllUsers("sortbyemail");
+        });
+
+
     });
 }
 
@@ -218,7 +220,7 @@ function generateContent() {
             changeSubmit();
         });
 
-       
+
         $("#createUser").click(function () {
             createUser();
         });
@@ -237,7 +239,7 @@ function generateContent() {
             getAllUsers("getall");
         });
 
-        
+
 
 
     });
@@ -319,7 +321,33 @@ function getAllGames(url) {
         method: 'GET',
         data: { toggle: toggle }
     }).done(function (result) {
-        
+        let message = '<table class="table table-striped table-dark">' +
+            '<thead>' +
+            '<tr>' +
+            '<th scope="col">#</th>' +
+            '<th scope="col" id="sortByName">Name ↓↑</th>' +
+            '<th scope="col" id="sortByYear">Year ↓↑</th>' +
+            '<th scope="col">Platforms</th>' +
+            '<th scope="col">Score</th>' +
+            '<th scope="col">Additional info</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+        let numberInList = 1;
+        $.each(result, function (index, item) {
+            message += '<tr>';
+            message += '<th scope="row">' + numberInList + '</th>';
+            message += '<td>' + item.name + '</td>';
+            message += '<td>' + item.year + '</td>';
+            message += '<td>' + item.platforms + '</td>';
+            message += '<td>' + item.score.score.toFixed(2) + '</td>';
+            message += '<td style="width: 50px"><span class="additional" id="' + item.name + '"data-title="Additional"><button class="btn btn-info">A</button></span></td>';
+            message += '</tr>';
+            numberInList++;
+        });
+        message += '</tbody></table>';
+        console.log(message);
+        $("#showResults").html(message);
         $("#sortByName").click(function () {
             getAllGames("sortedByName");
         });
@@ -432,7 +460,7 @@ function showModal(result) {
                     data: { name: this.id }
                 }).done(function (result) {
                     ShowStatus(result, 1);
-                    
+
                 });
             });
 
@@ -473,7 +501,7 @@ function showEditModal(result) {
     let spanDiv = '</span></div>';
 
     let formControlBeginningWithoutSpanDiv = '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="';
-    let formControlBeginning = spanDiv + formControlBeginningWithoutSpanDiv; 
+    let formControlBeginning = spanDiv + formControlBeginningWithoutSpanDiv;
 
     let message = '<div class="input-group input-group-sm mb-3">'
         + '<div class="input-group-prepend" id="' + result.unEditedName + '">'
@@ -565,7 +593,7 @@ function showEditModal(result) {
             data: { nameOfGameToEdit: result.unEditedName, name: name, year: year, platforms: platforms, theme: theme, genre: genre, releasedWhere: releasedWhere, publisher: publisher, developer: developer }
         }).done(function (result) {
             ShowStatus(result, 0);
-            
+
 
         }).fail(function (xhr, status, error) {
 
@@ -576,7 +604,7 @@ function showEditModal(result) {
                 concatinatedErrorMessages += item[0] + " ";
             });
             ShowStatus(concatinatedErrorMessages, 1);
-            
+
         });
     });
 }
@@ -697,7 +725,7 @@ function createGame() {
         data: { name: name, year: year, platforms: platforms, theme: theme, genre: genre, releasedWhere: releasedWhere, publisher: publisher, developer: developer }
     }).done(function (result) {
         ShowStatus(result, 0);
-        
+
 
     }).fail(function (xhr, status, error) {
 

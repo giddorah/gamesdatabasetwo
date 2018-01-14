@@ -122,6 +122,7 @@ namespace gamesdatabasetwo.Data
             {
                 listOfUsers.Add(new UserVM { Email = user.Email });
             }
+            
             return listOfUsers;
         }
 

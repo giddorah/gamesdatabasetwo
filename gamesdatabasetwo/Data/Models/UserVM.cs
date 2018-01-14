@@ -8,6 +8,7 @@ namespace gamesdatabasetwo.Data
     public class UserVM
     {
         public string Email { get; set; }
+        public IList<string> Role { get; set; }
 
     }
 }
