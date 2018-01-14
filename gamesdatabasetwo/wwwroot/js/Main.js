@@ -194,8 +194,8 @@ function generateContent() {
 
         if (result == "Admin") {
             $("#userContent").html('<input id="userEmail" type="text" />' +
-                '<button btn btn-primary id="createUser">Create staff</button> <br />' +
-                '<button id="getAll">Get all users</button><br />' +
+                '<button class ="btn btn-success" id="createUser">Create staff</button> <br />' +
+                '<button class="btn btn-primary" id="getAll">Get all users</button><br />' +
                 '<button class="btn btn-danger" id="logOut">Log out</button><br />');
             $("#adminButtons").html('<input type="text" id="gameId" /> <br />' +
                 '<button class="btn btn-primary" id="getSpecificGame">GetGame</button> <br />' +
