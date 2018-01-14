@@ -482,8 +482,7 @@ function showEditModal(result) {
         + '<div class="input-group-prepend" id="' + result.unEditedName + '">'
         + '<span class="input-group-text" id="inputGroup-sizing-sm">'
         + 'Name:'
-        + '</span>'
-        + '</div>'
+        + spanDiv
         + formControlBeginningWithoutSpanDiv + 'editGameName" value="' + result.name + '"/>'
         + fromDivToSpan
         + 'Year:'
