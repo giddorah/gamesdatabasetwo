@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using gamesdatabasetwo.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +36,9 @@ namespace gamesdatabasetwo
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 
             services.AddMvc();
         }

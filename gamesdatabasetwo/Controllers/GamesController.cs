@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Security.Claims;
 using gamesdatabasetwo.Data;
 using gamesdatabasetwo.Managers;
 using gamesdatabasetwo.Other;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,13 +15,22 @@ namespace gamesdatabasetwo.Controllers
     {
         private ApplicationDbContext context;
         private Repository repository = new Repository();
-        private readonly UserManager<ApplicationUser> userManager;
+       
+        public string UserId { get; set; }
 
-        public GamesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public GamesController(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             this.context = context;
-            this.userManager = userManager;
+            try
+            {
+            UserId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
+            }
+            catch (Exception)
+            {
+
+            }
+            //UserId = userId;
         }
 
         [HttpGet]
@@ -48,7 +59,7 @@ namespace gamesdatabasetwo.Controllers
             {
                 result = context.GameByIdConvertedToViewModel(id);
 
-                if (context.CheckIfUserHasAlreadyVoted(userManager.GetUserId(HttpContext.User), id))
+                if (context.CheckIfUserHasAlreadyVoted(UserId, id))
                 {
                     result.Score.Id = -1;
                     return Ok(result);
@@ -68,6 +79,7 @@ namespace gamesdatabasetwo.Controllers
         [Route("getallgames")]
         public IActionResult GetAllGames()
         {
+            //return Ok(LoggedInUser);
             return Ok(context.GetAllGamesFromDatabase());
         }
 
@@ -221,7 +233,7 @@ namespace gamesdatabasetwo.Controllers
             var dbModel = context.GameByName(name);
 
 
-            if (context.CheckIfUserHasAlreadyVoted(userManager.GetUserId(HttpContext.User), dbModel.Id))
+            if (context.CheckIfUserHasAlreadyVoted(UserId, dbModel.Id))
             {
                 result.Score.Id = -1;
                 return Ok(result);
@@ -262,7 +274,7 @@ namespace gamesdatabasetwo.Controllers
         public IActionResult AddScore(string name, int score)
         {
             var gameToChangeScoreOn = context.GameByName(name);
-            if (context.CheckIfUserHasAlreadyVoted(userManager.GetUserId(HttpContext.User), gameToChangeScoreOn.Id))
+            if (context.CheckIfUserHasAlreadyVoted(UserId, gameToChangeScoreOn.Id))
             {
                 return BadRequest("User has already voted.");
             }
@@ -276,7 +288,7 @@ namespace gamesdatabasetwo.Controllers
                 gameToChangeScoreOn.Score.Score = newScore;
                 gameToChangeScoreOn.Score.Votes++;
                 context.ChangeScoring(gameToChangeScoreOn);
-                context.AddRelationUserAndGame(userManager.GetUserId(HttpContext.User), gameToChangeScoreOn.Id);
+                context.AddRelationUserAndGame(UserId, gameToChangeScoreOn.Id);
 
                 var scoreVM = new ScoreVM { Score = gameToChangeScoreOn.Score.Score, Votes = gameToChangeScoreOn.Score.Votes };
 
