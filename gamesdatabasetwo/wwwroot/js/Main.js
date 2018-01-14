@@ -180,15 +180,15 @@ function generateContent() {
 
         }
         if (result == "User") {
-            $("#userContent").html('<button class="btn btn-danger" id="logOut">Log out</button><br />' +
-                ' <input id="emailChange" type="text" />' +
-                '<button class="btn btn-warning" id="changeSubmit">Change email</button ><br />');
+            $("#userContent").html('<input id="emailChange" type="text" />'+
+                '<button class="btn btn-warning" id="changeSubmit">Change email</button ><br />' +
+                '<button class="btn btn-danger" id="logOut">Log out</button> <br />');
         }
 
         if (result == "Staff") {
-            $("#userContent").html('<button class="btn btn-danger" id="logOut">Log out</button><br />' +
-                ' <input id="emailChange" type="text" />' +
-                '<button class="btn btn-warning" id="changeSubmit">Change email</button ><br />');
+            $("#userContent").html(' <input id="emailChange" type="text" />'+
+                '<button class="btn btn-warning" id="changeSubmit">Change email</button ><br />' +
+                '<button class="btn btn-danger" id="logOut">Log out</button><br />');
             generateCreateArea();
         }
 
