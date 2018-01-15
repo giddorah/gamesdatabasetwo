@@ -16,10 +16,16 @@ namespace gamesdatabasetwo.Managers
             this.applicationDbContext = applicationDbContext;
         }
 
-        internal IOrderedEnumerable<UserVM> AlphabeticallySortedUsers(List<UserVM> users)
+        internal IOrderedEnumerable<UserVM> AlphabeticallySortedUsers(List<UserVM> users, bool toggle)
         {
-            var sortedList = users.OrderBy(o => o.Email);
-            return sortedList;
+            if (toggle)
+            {
+                var sortedList = users.OrderBy(o => o.Email);
+                return sortedList;
+            }
+            var sortedListDescending = users.OrderByDescending(o => o.Email);
+            return sortedListDescending;
+            
         }
 
         internal IOrderedEnumerable<ViewGameModel> AlphabeticallySortedGames(List<ViewGameModel> games, bool toggle)
