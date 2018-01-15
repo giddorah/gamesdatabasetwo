@@ -1,8 +1,6 @@
 ﻿let toggle;
 $(function () {
 
-    getAllDevelopers();
-    getAllPublishers();
     generateContent();
 
     $("#publisherDropdown").html();
@@ -659,38 +657,6 @@ function generateCreateArea() {
 
     getAllDevelopers();
     getAllPublishers();
-
-    function getAllDevelopers() {
-        $.ajax({
-            url: '/api/games/getdevelopers',
-            method: 'GET'
-        }).done(function (result) {
-            let developerData = "<option selected>Choose Developer...</option>";
-
-            let number = 1;
-            $.each(result, function (index, item) {
-                developerData += '<option value="' + item.name + '">' + item.name + '</option>';
-                number++;
-            });
-            $("#developerSelectForm").html(developerData);
-        });
-    }
-
-    function getAllPublishers() {
-        $.ajax({
-            url: '/api/games/getpublishers',
-            method: 'GET'
-        }).done(function (result) {
-            let publisherData = "<option selected>Choose Publisher...</option>";
-
-            let number = 1;
-            $.each(result, function (index, item) {
-                publisherData += '<option value="' + item.name + '">' + item.name + '</option>';
-                number++;
-            });
-            $("#publisherSelectForm").html(publisherData);
-        });
-    }
 
     $("#createArea").html(message);
     $("#createGame").click(function () {
