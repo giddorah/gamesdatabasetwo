@@ -209,7 +209,7 @@ namespace gamesdatabasetwo.Controllers
             else
             {
                 context.AddGame(gameToAdd);
-                return Ok(gameToAdd);
+                return Ok($"Added {gameToAdd.Name}");
             }
         }
 
