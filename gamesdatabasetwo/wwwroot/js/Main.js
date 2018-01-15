@@ -1,4 +1,10 @@
 ﻿let toggle;
+
+let fromDivToSpan = '</div><div class="input-group input-group-sm mb-3"><div class="input-group-prepend"><span class="input-group-text" id="inputGroup-sizing-sm">';
+let spanDiv = '</span></div>';
+let formControlBeginningWithoutSpanDiv = '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="';
+let formControlBeginning = spanDiv + formControlBeginningWithoutSpanDiv;
+
 $(function () {
 
     generateContent();
@@ -44,7 +50,7 @@ function ShowStatus(contents, statusType) {
 
 function removeUser(email) {
 
-   
+
     $.ajax({
         url: '/users/remove',
         method: 'POST',
@@ -60,7 +66,7 @@ function removeUser(email) {
 
 function createUser() {
     let email = $("#userEmail").val();
-    
+
     $.ajax({
         url: '/users/add',
         method: 'POST',
@@ -143,7 +149,7 @@ function getAllUsers(url) {
             removeUser(this.id);
         });
         $("#sortByEmail").click(function () {
-            
+
             getAllUsers("sortbyemail");
         });
 
@@ -160,7 +166,7 @@ function generateContent() {
         url: '/users/returnrole',
         method: 'GET'
     }).done(function (result) {
-       
+
         if (result == "Anonymous") {
             $("#userContent").html('<input type="text" id="logInEmail" />' +
                 '<button class ="btn btn-primary btn-sm" id="logIn">Log in</button><br />' +
@@ -169,13 +175,13 @@ function generateContent() {
 
         }
         if (result == "User") {
-            $("#userContent").html('<input id="emailChange" type="text" />'+
+            $("#userContent").html('<input id="emailChange" type="text" />' +
                 '<button class="btn btn-warning btn-sm" id="changeSubmit">Change email</button ><br />' +
                 '<button class="btn btn-danger btn-sm" id="logOut">Log out</button> <br />');
         }
 
         if (result == "Staff") {
-            $("#userContent").html(' <input id="emailChange" type="text" />'+
+            $("#userContent").html(' <input id="emailChange" type="text" />' +
                 '<button class="btn btn-warning btn-sm" id="changeSubmit">Change email</button ><br />' +
                 '<button class="btn btn-danger btn-sm" id="logOut">Log out</button><br />');
             generateCreateArea();
@@ -234,35 +240,64 @@ function generateContent() {
     });
 }
 
-function getAllDevelopers() {
+function getAllDevelopers(editOrCreate) {
+    let developerData = "";
+
     $.ajax({
         url: '/api/games/getdevelopers',
         method: 'GET'
     }).done(function (result) {
-        let developerData = "<option selected>Choose Developer...</option>";
-
         let number = 1;
-        $.each(result, function (index, item) {
-            developerData += '<option value="' + item.name + '">' + item.name + '</option>';
-            number++;
-        });
-        $("#developerSelectForm").html(developerData);
+        if (editOrCreate === "create") {
+            let developerData = "<option selected>Choose Developer...</option>";
+            $.each(result, function (index, item) {
+                developerData += '<option value="' + item.name + '">' + item.name + '</option>';
+                number++;
+            });
+            $("#developerSelectForm").html(developerData);
+
+        }
+        else {
+            let developerData = "<option selected>" + editOrCreate.developer.name + "</option>";
+            $.each(result, function (index, item) {
+                developerData += '<option value="' + item.name + '">' + item.name + '</option>';
+                number++;
+            });
+            $("#developerEditSelectForm").html(developerData);
+
+        }
     });
 }
 
-function getAllPublishers() {
+function getAllPublishers(editOrCreate) {
+    let publisherData = "";
+
     $.ajax({
         url: '/api/games/getpublishers',
         method: 'GET'
     }).done(function (result) {
-        let publisherData = "<option selected>Choose Publisher...</option>";
-
+        if (editOrCreate === "create") {
+            publisherData = "<option selected>Choose Publisher...</option>";
+        }
+        else {
+            publisherData = "<option selected>" + editOrCreate.publisher.name + "</option>";
+        }
         let number = 1;
         $.each(result, function (index, item) {
-            publisherData += '<option value="' + item.name + '">' + item.name + '</option>';
-            number++;
+            if (editOrCreate === "create") {
+                publisherData += '<option value="' + item.name + '">' + item.name + '</option>';
+            }
+            else {
+                publisherData += '<option value="' + item.name + '">' + item.name + '</option>';
+            }
         });
-        $("#publisherSelectForm").html(publisherData);
+        if (editOrCreate === "create") {
+            $("#publisherSelectForm").html(publisherData);
+        }
+        else {
+            $("#publisherEditSelectForm").html(publisherData);
+        }
+        number++;
     });
 }
 
@@ -335,7 +370,7 @@ function getAllGames(url) {
             numberInList++;
         });
         message += '</tbody></table>';
-        
+
         $("#showResults").html(message);
         $("#sortByName").click(function () {
             getAllGames("sortedByName");
@@ -364,7 +399,7 @@ $("#getAllGames").click(function () {
 
 function showModal(result) {
     let footer = "";
-    
+
     let message = '<table class="table table-striped table-dark">' +
         '<thead>' +
         '<tr>' +
@@ -484,14 +519,6 @@ function showModal(result) {
 
 
 function showEditModal(result) {
-
-    let fromDivToSpan = '</div><div class="input-group input-group-sm mb-3"><div class="input-group-prepend"><span class="input-group-text" id="inputGroup-sizing-sm">';
-
-    let spanDiv = '</span></div>';
-
-    let formControlBeginningWithoutSpanDiv = '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="';
-    let formControlBeginning = spanDiv + formControlBeginningWithoutSpanDiv;
-
     let message = '<div class="input-group input-group-sm mb-3">'
         + '<div class="input-group-prepend" id="' + result.unEditedName + '">'
         + '<span class="input-group-text" id="inputGroup-sizing-sm">'
@@ -533,37 +560,6 @@ function showEditModal(result) {
     getAllDevelopers(result);
     getAllPublishers(result);
 
-    function getAllDevelopers(defaultValue) {
-        $.ajax({
-            url: '/api/games/getdevelopers',
-            method: 'GET'
-        }).done(function (result) {
-            let developerData = "<option selected>" + defaultValue.developer.name + "</option>";
-
-            let number = 1;
-            $.each(result, function (index, item) {
-                developerData += '<option value="' + item.name + '">' + item.name + '</option>';
-                number++;
-            });
-            $("#developerEditSelectForm").html(developerData);
-        });
-    }
-
-    function getAllPublishers(defaultValue) {
-        $.ajax({
-            url: '/api/games/getpublishers',
-            method: 'GET'
-        }).done(function (result) {
-            let publisherData = "<option selected>" + defaultValue.publisher.name + "</option>";
-
-            let number = 1;
-            $.each(result, function (index, item) {
-                publisherData += '<option value="' + item.name + '">' + item.name + '</option>';
-                number++;
-            });
-            $("#publisherEditSelectForm").html(publisherData);
-        });
-    }
 
     $(".saveedit").click(function () {
         let name = $("#editGameName").val();
@@ -603,49 +599,23 @@ function generateCreateArea() {
         + '<div class="input-group-prepend" id="create">'
         + '<span class="input-group-text" id="inputGroup-sizing-sm">'
         + 'Name:'
-        + '</span>'
-        + '</div>'
-        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameName"/>'
-        + '</div>'
-        + '<div class="input-group input-group-sm mb-3">'
-        + '<div class="input-group-prepend">'
-        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + spanDiv
+        + formControlBeginningWithoutSpanDiv + 'gameName" />'
+        + fromDivToSpan
         + 'Year:'
-        + '</span>'
-        + '</div>'
-        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameYear"/>'
-        + '</div>'
-        + '<div class="input-group input-group-sm mb-3">'
-        + '<div class="input-group-prepend">'
-        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + formControlBeginning +' gameYear"/>'
+        + fromDivToSpan
         + 'Platforms:'
-        + '</span>'
-        + '</div>'
-        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gamePlatforms"/>'
-        + '</div>'
-        + '<div class="input-group input-group-sm mb-3">'
-        + '<div class="input-group-prepend">'
-        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + formControlBeginning +'gamePlatforms"/>'
+        + fromDivToSpan
         + 'Theme:'
-        + '</span>'
-        + '</div>'
-        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameTheme"/>'
-        + '</div>'
-        + '<div class="input-group input-group-sm mb-3">'
-        + '<div class="input-group-prepend">'
-        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + formControlBeginning + 'gameTheme"/>'
+        + fromDivToSpan
         + 'Genre:'
-        + '</span>'
-        + '</div>'
-        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameGenre"/>'
-        + '</div>'
-        + '<div class="input-group input-group-sm mb-3">'
-        + '<div class="input-group-prepend">'
-        + '<span class="input-group-text" id="inputGroup-sizing-sm">'
+        + formControlBeginning + 'gameGenre"/>'
+        + fromDivToSpan
         + 'Released where:'
-        + '</span>'
-        + '</div>'
-        + '<input class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" type="text" id="gameReleasedWhere"/>'
+        + formControlBeginning + 'gameReleasedWhere"/>'
         + '</div>'
         + '<div class="input-group input-group-sm mb-3">'
         + '<select class="custom-select my-1 mr-sm-2" id="publisherSelectForm"></select>'
@@ -656,8 +626,8 @@ function generateCreateArea() {
         + '<button class="btn btn-primary" id="createGame">Create game</button>'
         + '</div >';
 
-    getAllDevelopers();
-    getAllPublishers();
+    getAllDevelopers("create");
+    getAllPublishers("create");
 
     $("#createArea").html(message);
     $("#createGame").click(function () {
@@ -666,7 +636,7 @@ function generateCreateArea() {
 }
 
 function createGame() {
-   
+
     let name = $("#gameName").val();
     let year = $("#gameYear").val();
     let platforms = $("#gamePlatforms").val();
