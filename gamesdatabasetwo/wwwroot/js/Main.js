@@ -178,12 +178,14 @@ function generateContent() {
             $("#userContent").html('<input id="emailChange" type="text" />' +
                 '<button class="btn btn-warning btn-sm" id="changeSubmit">Change email</button ><br />' +
                 '<button class="btn btn-danger btn-sm" id="logOut">Log out</button> <br />');
+           
         }
 
         if (result == "Staff") {
             $("#userContent").html(' <input id="emailChange" type="text" />' +
                 '<button class="btn btn-warning btn-sm" id="changeSubmit">Change email</button ><br />' +
                 '<button class="btn btn-danger btn-sm" id="logOut">Log out</button><br />');
+           
             generateCreateArea();
         }
 
@@ -227,6 +229,7 @@ function generateContent() {
 
         $("#logOut").click(function () {
             logOut();
+            $("#showResults").empty();
 
         });
 
