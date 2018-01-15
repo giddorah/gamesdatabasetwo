@@ -108,11 +108,12 @@ function logOut() {
 }
 
 function getAllUsers(url) {
-
-
+    toggle = !toggle;
+    console.log(toggle);
     $.ajax({
         url: 'users/' + url,
-        method: 'GET'
+        method: 'GET',
+        data: { toggle: toggle }
 
     }).done(function (result) {
 
@@ -144,7 +145,7 @@ function getAllUsers(url) {
             removeUser(this.id);
         });
         $("#sortByEmail").click(function () {
-           
+            
             getAllUsers("sortbyemail");
         });
 
