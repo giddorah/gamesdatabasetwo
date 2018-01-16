@@ -606,7 +606,7 @@ function generateCreateArea() {
         + formControlBeginningWithoutSpanDiv + 'gameName" />'
         + fromDivToSpan
         + 'Year:'
-        + formControlBeginning +' gameYear"/>'
+        + formControlBeginning +'gameYear"/>'
         + fromDivToSpan
         + 'Platforms:'
         + formControlBeginning +'gamePlatforms"/>'
